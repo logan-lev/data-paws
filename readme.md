@@ -126,21 +126,19 @@ Data Paws
 ## Storyboarding
 
 
-![Opening cut-scene (Cat smelling aroma from window)](readme_images/image1.png)
+!(readme_images/image1.png)
 Opening cut-scene (Cat smelling aroma from window)
 
+!(readme_images/image2.png)
 Cat going down fire escape (Movement Tutorial)
 
-
-
+!(readme_images/image3.png)
 Cat doing stack puzzle (first in last out) [Puzzle Tutorial]
 
-
-
+!(readme_images/image4.png)
 3 Puzzles (TBD)
 
-
-
+!(readme_images/image5.png)
 Cat eating fish (tentative ending)
 
 

@@ -9,9 +9,9 @@ Data Paws
 ## Developers
 
 *Logan Levine (loganlev@udel.edu)*
-*Tolulope Akin-Olugbemi (thettolu@udel.edu)*
-*Zhicheng Liu (zhcnliu@udel.edu)*
-*Alexander Clawson (clawsonx@udel.edu)*
+*\nTolulope Akin-Olugbemi (thettolu@udel.edu)*
+*\nZhicheng Liu (zhcnliu@udel.edu)*
+*\nAlexander Clawson (clawsonx@udel.edu)*
 
 ## Basic Instructions
 (Coming Soon)
@@ -23,7 +23,7 @@ Data Paws
 (Coming Soon)
 
 ## Education Game Design Document
-[a relative link](egdd.md)
+[EGDD](docs/egdd.md)
 
 ## Credits and Acknowledgements
 (Coming Soon)

@@ -9,9 +9,9 @@ Data Paws
 ## Developers
 
 *Logan Levine (loganlev@udel.edu)*
-*\nTolulope Akin-Olugbemi (thettolu@udel.edu)*
-*\nZhicheng Liu (zhcnliu@udel.edu)*
-*\nAlexander Clawson (clawsonx@udel.edu)*
+*/nTolulope Akin-Olugbemi (thettolu@udel.edu)*
+*/nZhicheng Liu (zhcnliu@udel.edu)*
+*/nAlexander Clawson (clawsonx@udel.edu)*
 
 ## Basic Instructions
 (Coming Soon)

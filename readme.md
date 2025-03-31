@@ -10,8 +10,8 @@ We’re combining elements of traditional platformers with puzzles inspired by P
 
 Logan Levine (loganlev@udel.edu)\
 Tolulope Akin-Olugbemi (thettolu@udel.edu)\
-Zhicheng Liu (zhcnliu@udel.edu) 
-Alexander Clawson (clawsonx@udel.edu)\
+Zhicheng Liu (zhcnliu@udel.edu)\
+Alexander Clawson (clawsonx@udel.edu)
 
 ## Basic Instructions
 (Coming Soon)

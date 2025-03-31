@@ -4,14 +4,14 @@ Data Paws
 
 ## Description of Game
 
-*We’re combining elements of traditional platformers with puzzles inspired by Python Data Structures to make Data Paws, a game where you explore the city through the lens of a cat. The game teaches the player all about different data structures in a fun and entertaining format, suitable for even the most inexperienced people.*
+We’re combining elements of traditional platformers with puzzles inspired by Python Data Structures to make Data Paws, a game where you explore the city through the lens of a cat. The game teaches the player all about different data structures in a fun and entertaining format, suitable for even the most inexperienced people.
 
 ## Developers
 
-*Logan Levine (loganlev@udel.edu)\*
-*Tolulope Akin-Olugbemi (thettolu@udel.edu)\*
-*Zhicheng Liu (zhcnliu@udel.edu)\*
-*/nAlexander Clawson (clawsonx@udel.edu)\*
+Logan Levine (loganlev@udel.edu)\
+Tolulope Akin-Olugbemi (thettolu@udel.edu)\
+Zhicheng Liu (zhcnliu@udel.edu) 
+Alexander Clawson (clawsonx@udel.edu)\
 
 ## Basic Instructions
 (Coming Soon)

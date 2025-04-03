@@ -26,6 +26,9 @@ public class playerController : MonoBehaviour
         if(Input.GetKey(KeyCode.RightArrow)){
             MoveRight();
         }
+        if(Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow)){
+            StopMove();
+        }
     }
 
     void MoveRight()
@@ -42,6 +45,10 @@ public class playerController : MonoBehaviour
         {
             cat.linearVelocityX -= acceleration;
         }
+    }
+
+    void StopMove(){
+        cat.linearVelocityX = 0;
     }
 
     void Jump()

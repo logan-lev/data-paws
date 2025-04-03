@@ -3,10 +3,9 @@ using UnityEngine;
 public class playerController : MonoBehaviour
 {
     public Rigidbody2D cat;
-    public float moveSpeed = 2f;
-    public float acceleration = 1f;
+    public float acceleration = 0.5f;
     public float jumpForce = 5f;
-    public float speedLimit = 8f;
+    public float speedLimit = 3f;
     private bool canJump = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -31,16 +30,18 @@ public class playerController : MonoBehaviour
 
     void MoveRight()
     {
-        //cat.linearVelocity = Vector2.right*moveSpeed;
-
-        cat.linearVelocityX += 0.5f;
+        if(cat.linearVelocityX < speedLimit)
+        {
+            cat.linearVelocityX += acceleration;
+        }   
     }
 
     void MoveLeft()
     {
-        //cat.linearVelocity = Vector2.left*moveSpeed;
-
-        cat.linearVelocityX -= 0.5f;
+        if(cat.linearVelocityX > -speedLimit)
+        {
+            cat.linearVelocityX -= acceleration;
+        }
     }
 
     void Jump()

@@ -3,22 +3,33 @@ using UnityEngine;
 public class playerController : MonoBehaviour
 {
     public Rigidbody2D cat;
-    public float acceleration = 0.5f;
+    public float acceleration = 1f;
     public float jumpForce = 5f;
+    public float maxJumpForce = 10f;
     public float speedLimit = 3f;
+    public float friction = 2f;
     private bool canJump = true;
+    private float currentJumpForce;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.UpArrow) && canJump){
+        if(Input.GetKeyDown(KeyCode.UpArrow) && canJump)
+        {
             Jump();
+        }
+        if (Input.GetKeyUp(KeyCode.Space) && canJump)
+        {
+            currentJumpForce = jumpForce;
+            jumpForce = maxJumpForce;
+            Jump();
+            jumpForce = currentJumpForce;
         }
         if(Input.GetKey(KeyCode.LeftArrow)){
             MoveLeft();
@@ -48,7 +59,14 @@ public class playerController : MonoBehaviour
     }
 
     void StopMove(){
-        cat.linearVelocityX = 0;
+        if(cat.linearVelocityX > 0)
+        {
+            cat.linearVelocityX -= friction;
+        } 
+        if(cat.linearVelocityX < 0)
+        {
+            cat.linearVelocityX += friction;
+        }
     }
 
     void Jump()

@@ -302,7 +302,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &407011342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,9 +316,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cat: {fileID: 407011341}
-  moveSpeed: 5
+  acceleration: 0.5
   jumpForce: 5
-  speedLimit: 8
+  maxJumpForce: 10
+  speedLimit: 3
+  friction: 5
 --- !u!212 &407011343
 SpriteRenderer:
   m_ObjectHideFlags: 0

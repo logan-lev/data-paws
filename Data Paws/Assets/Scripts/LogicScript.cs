@@ -3,6 +3,8 @@ using UnityEngine;
 public class LogicScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public playerController player;
+    
     void Start()
     {
         
@@ -13,4 +15,10 @@ public class LogicScript : MonoBehaviour
     {
         
     }
+
+    public void playerDeath(){
+
+    }
+
+
 }

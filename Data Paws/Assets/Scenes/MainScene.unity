@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myRigidBody: {fileID: 321783554}
+  enemySprite: {fileID: 0}
   runSpeed: 3
 --- !u!58 &321783552
 CircleCollider2D:
@@ -591,7 +592,10 @@ MonoBehaviour:
   cat: {fileID: 581245730}
   acceleration: 0.5
   jumpForce: 5
+  maxJumpForce: 10
   speedLimit: 3
+  friction: 2
+  logic: {fileID: 0}
 --- !u!1 &1241527454
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,7 +608,7 @@ GameObject:
   - component: {fileID: 1241527456}
   m_Layer: 0
   m_Name: Logic Manager
-  m_TagString: Untagged
+  m_TagString: Logic
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -636,6 +640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f397a16a93b104ab7506568b767aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!1 &1521283825
 GameObject:
   m_ObjectHideFlags: 0

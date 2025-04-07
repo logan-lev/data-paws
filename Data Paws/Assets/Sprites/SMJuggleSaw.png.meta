@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1fb960e5edc0cad43a09daac100d7b6c
+guid: 73941dac50d23464a87b27468eef5e65
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5940055634875764365
-    second: 327_0
+      213: 656035719261378879
+    second: SMJuggleSaw_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 327_0
+      name: SMJuggleSaw_0
       rect:
         serializedVersion: 2
-        x: 63
-        y: 21
-        width: 349
-        height: 433
+        x: 0
+        y: 0
+        width: 360
+        height: 360
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3713c213fdea09da0800000000000000
-      internalID: -5940055634875764365
+      spriteID: f39da86c205ba1900800000000000000
+      internalID: 656035719261378879
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      327_0: -5940055634875764365
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

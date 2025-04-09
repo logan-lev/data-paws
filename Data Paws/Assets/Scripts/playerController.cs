@@ -11,6 +11,9 @@ public class playerController : MonoBehaviour
     private bool canJump = true;
     private float currentJumpForce;
 
+    private bool restart = false;
+    public GameObject respawnPoint;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,6 +42,12 @@ public class playerController : MonoBehaviour
         }
         if((Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) && canJump){
             cat.linearVelocity = Vector2.zero;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            cat.linearVelocity = Vector2.zero;
+            cat.transform.position = respawnPoint.transform.position;
         }
     }
 

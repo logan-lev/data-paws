@@ -12,6 +12,9 @@ public class playerController : MonoBehaviour
     private float currentJumpForce;
     public LogicScript logic;
 
+    private bool restart = false;
+    public GameObject respawnPoint;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,7 +24,7 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.UpArrow) && canJump)
+        if((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && canJump)
         {
             Jump();
         }
@@ -32,14 +35,20 @@ public class playerController : MonoBehaviour
             Jump();
             jumpForce = currentJumpForce;
         }
-        if(Input.GetKey(KeyCode.LeftArrow)){
+        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)){
             MoveLeft();
         }
-        if(Input.GetKey(KeyCode.RightArrow)){
+        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)){
             MoveRight();
         }
-        if(Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow)){
-            StopMove();
+        if((Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) && canJump){
+            cat.linearVelocity = Vector2.zero;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            cat.linearVelocity = Vector2.zero;
+            cat.transform.position = respawnPoint.transform.position;
         }
     }
 
@@ -59,16 +68,16 @@ public class playerController : MonoBehaviour
         }
     }
 
-    void StopMove(){
-        if(cat.linearVelocityX > 0)
-        {
-            cat.linearVelocityX -= friction;
-        } 
-        if(cat.linearVelocityX < 0)
-        {
-            cat.linearVelocityX += friction;
-        }
-    }
+    // void StopMove(){
+    //     if(cat.linearVelocityX > 0)
+    //     {
+    //         cat.linearVelocityX -= friction;
+    //     } 
+    //     if(cat.linearVelocityX < 0)
+    //     {
+    //         cat.linearVelocityX += friction;
+    //     }
+    // }
 
     void Jump()
     {

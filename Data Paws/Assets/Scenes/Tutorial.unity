@@ -12527,6 +12527,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a4deff01a04e244781e9306cf5cfbd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cat: {fileID: 0}
+  respawnPoint: {fileID: 0}
+  acceleration: 1
+  jumpForce: 0
+  maxJumpForce: 10
+  speedLimit: 3
+  friction: 2
   groundCheck: {fileID: 1301128632}
   groundCheckSize: {x: 0.95, y: 0.1}
   groundLayer:
@@ -12602,7 +12609,7 @@ Transform:
   m_GameObject: {fileID: 1517640015}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 79, y: -22, z: 0}
+  m_LocalPosition: {x: -4, y: -22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     public float friction = 2f;
     private bool canJump = true;
     private float currentJumpForce;
-    public LogicScript logic;
     private Rigidbody2D rb;
     private Vector2 velocity;
     private float inputAxis;

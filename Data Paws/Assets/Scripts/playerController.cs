@@ -1,82 +1,141 @@
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerMovement : MonoBehaviour
 {
-    public Rigidbody2D cat;
-    public float acceleration = 1f;
-    public float jumpForce = 5f;
-    public float maxJumpForce = 10f;
-    public float speedLimit = 3f;
-    public float friction = 2f;
-    private bool canJump = true;
-    private float currentJumpForce;
+    private Rigidbody2D rb;
+    private Vector2 velocity;
+    private float inputAxis;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("Ground Detection")]
+    public Transform groundCheck;
+    public Vector2 groundCheckSize = new Vector2(1.0f, 0.1f);
+    public LayerMask groundLayer;
+
+    [Header("Movement Settings")]
+    public float moveSpeed = 8f;
+    public float maxJumpHeight = 5f;
+    public float maxJumpTime = 1f;
+    public float ceilingCheckDistance = 0.6f;
+
+    [Header("Wall Check")]
+    public float wallCheckDistance = 0.55f;
+
+    private bool grounded;
+
+    private float jumpForce;
+    private float gravity;
+    private Vector3 startingPosition;
+    private bool onLadder = false;
+    public float climbSpeed = 3f;
+
+
+    private void Awake()
     {
-
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && canJump)
+        jumpForce = 2f * maxJumpHeight / (maxJumpTime / 2f);
+        gravity = -2f * maxJumpHeight / Mathf.Pow(maxJumpTime / 2f, 2f);
+        startingPosition = transform.position;
+    }
+
+    private void Update()
+    {
+        inputAxis = Input.GetAxis("Horizontal");
+
+        // Wall check
+        bool hittingWallRight = Physics2D.Raycast(transform.position, Vector2.right, wallCheckDistance, groundLayer);
+        bool hittingWallLeft = Physics2D.Raycast(transform.position, Vector2.left, wallCheckDistance, groundLayer);
+
+        // Block velocity if hitting wall
+        if ((velocity.x > 0f && hittingWallRight) || (velocity.x < 0f && hittingWallLeft))
         {
-            Jump();
+            velocity.x = 0f;
         }
-        if (Input.GetKeyUp(KeyCode.Space) && canJump)
+
+        // Horizontal movement
+        float targetSpeed = inputAxis * moveSpeed;
+
+        if (Mathf.Abs(inputAxis) > 0.01f)
         {
-            currentJumpForce = jumpForce;
-            jumpForce = maxJumpForce;
-            Jump();
-            jumpForce = currentJumpForce;
+            float acceleration = grounded ? moveSpeed * 2f : moveSpeed;
+            velocity.x = Mathf.MoveTowards(velocity.x, targetSpeed, acceleration * Time.deltaTime);
         }
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)){
-            MoveLeft();
-        }
-        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)){
-            MoveRight();
-        }
-        if((Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) && canJump){
-            cat.linearVelocity = Vector2.zero;
-        }
-    }
-
-    void MoveRight()
-    {
-        if(cat.linearVelocityX < speedLimit)
+        else
         {
-            cat.linearVelocityX += acceleration;
-        }   
-    }
-
-    void MoveLeft()
-    {
-        if(cat.linearVelocityX > -speedLimit)
-        {
-            cat.linearVelocityX -= acceleration;
+            // Stronger deceleration when idle
+            float deceleration = grounded ? moveSpeed * 10f : moveSpeed * 4f;
+            velocity.x = Mathf.MoveTowards(velocity.x, 0f, deceleration * Time.deltaTime);
         }
-    }
 
-    // void StopMove(){
-    //     if(cat.linearVelocityX > 0)
-    //     {
-    //         cat.linearVelocityX -= friction;
-    //     } 
-    //     if(cat.linearVelocityX < 0)
-    //     {
-    //         cat.linearVelocityX += friction;
-    //     }
-    // }
+        // Ground check
+        grounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
 
-    void Jump()
+        // Snap to ground
+        if (grounded && velocity.y < 0f)
+        {
+            velocity.y = -0.1f;
+        }
+
+        // Jump
+        if (grounded && Input.GetButtonDown("Jump"))
+        {
+            velocity.y = jumpForce;
+        }
+
+        // Ceiling check
+        RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
+        if (ceilingHit.collider != null && velocity.y > 0f)
+        {
+            velocity.y = 0f;
+        }
+
+        // Gravity
+        bool isFalling = velocity.y < 0f || !Input.GetButton("Jump");
+        float gravityMultiplier = isFalling ? 2f : 1f;
+        velocity.y += gravity * gravityMultiplier * Time.deltaTime;
+        velocity.y = Mathf.Max(velocity.y, gravity / 2f);
+    
+    if (Input.GetKeyDown(KeyCode.R))
     {
-        cat.linearVelocity = Vector2.up*jumpForce;
-        canJump = false;
+        ResetPlayerPosition();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        canJump = true;
+    if (onLadder)
+{
+    rb.gravityScale = 0f;
+    velocity.y = Input.GetAxisRaw("Vertical") * climbSpeed;
+}
+else
+{
+    rb.gravityScale = 1f;
+}
     }
+
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+    }
+
+    private void ResetPlayerPosition()
+{
+    transform.position = startingPosition;
+    velocity = Vector2.zero;
+    rb.linearVelocity = Vector2.zero;
+}
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (other.CompareTag("Ladder"))
+        onLadder = true;
+}
+
+private void OnTriggerExit2D(Collider2D other)
+{
+    if (other.CompareTag("Ladder"))
+        onLadder = false;
+}
+
 }

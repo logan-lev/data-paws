@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -90,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Jump
-        if (grounded && Input.GetButtonDown("Jump"))
+        if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             velocity.y = jumpForce;
         }
@@ -103,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Gravity
-        bool isFalling = velocity.y < 0f || !Input.GetButton("Jump");
+        bool isFalling = velocity.y < 0f || !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W));
         float gravityMultiplier = isFalling ? 2f : 1f;
         velocity.y += gravity * gravityMultiplier * Time.deltaTime;
         velocity.y = Mathf.Max(velocity.y, gravity / 2f);

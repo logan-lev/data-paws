@@ -4,6 +4,16 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
+    public Rigidbody2D cat;
+    public GameObject respawnPoint;
+    public float acceleration = 1f;
+    public float jumpForce = 5f;
+    public float maxJumpForce = 10f;
+    public float speedLimit = 3f;
+    public float friction = 2f;
+    private bool canJump = true;
+    private float currentJumpForce;
+    public LogicScript logic;
     private Rigidbody2D rb;
     private Vector2 velocity;
     private float inputAxis;
@@ -24,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool grounded;
 
-    private float jumpForce;
     private float gravity;
     private Vector3 startingPosition;
     private bool onLadder = false;
@@ -105,15 +114,23 @@ public class PlayerMovement : MonoBehaviour
         ResetPlayerPosition();
     }
 
-    if (onLadder)
-{
-    rb.gravityScale = 0f;
-    velocity.y = Input.GetAxisRaw("Vertical") * climbSpeed;
-}
-else
-{
-    rb.gravityScale = 1f;
-}
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy"){
+            cat.linearVelocity = Vector2.zero;
+            cat.transform.position = respawnPoint.transform.position;
+        }
+            canJump = true;
+        }
+        if (onLadder)
+            {
+        rb.gravityScale = 0f;
+        velocity.y = Input.GetAxisRaw("Vertical") * climbSpeed;
+        }
+        else
+        {
+            rb.gravityScale = 1f;
+        }
     }
 
     private void FixedUpdate()

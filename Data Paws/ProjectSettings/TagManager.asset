@@ -4,6 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Enemy
+  - Logic
+  - Floor
   - Ladder
   - Hole1
   - Hole2
@@ -16,7 +19,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 

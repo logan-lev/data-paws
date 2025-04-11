@@ -102,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.R))
     {
         ResetPlayerPosition();
+
     }
 
     if (onLadder)
@@ -115,27 +116,11 @@ else
 }
     }
 
-    private void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
-    }
 
-    private void ResetPlayerPosition()
-{
-    transform.position = startingPosition;
-    velocity = Vector2.zero;
-    rb.linearVelocity = Vector2.zero;
-}
-private void OnTriggerEnter2D(Collider2D other)
-{
-    if (other.CompareTag("Ladder"))
-        onLadder = true;
 }
 
 private void OnTriggerExit2D(Collider2D other)
 {
     if (other.CompareTag("Ladder"))
         onLadder = false;
-}
-
 }

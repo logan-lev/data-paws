@@ -4,12 +4,16 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Floor
+  - Ladder
+  - Hole1
+  - Hole2
+  - Hole3
+  - Hole4
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - 

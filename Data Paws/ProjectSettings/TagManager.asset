@@ -7,11 +7,16 @@ TagManager:
   - Enemy
   - Logic
   - Floor
+  - Ladder
+  - Hole1
+  - Hole2
+  - Hole3
+  - Hole4
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - Enemy

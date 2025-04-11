@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D cat;
+    public GameObject respawnPoint;
     public float acceleration = 1f;
     public float jumpForce = 5f;
     public float maxJumpForce = 10f;
@@ -11,78 +13,104 @@ public class playerController : MonoBehaviour
     private bool canJump = true;
     private float currentJumpForce;
     public LogicScript logic;
+    private Rigidbody2D rb;
+    private Vector2 velocity;
+    private float inputAxis;
 
-    private bool restart = false;
-    public GameObject respawnPoint;
+    [Header("Ground Detection")]
+    public Transform groundCheck;
+    public Vector2 groundCheckSize = new Vector2(1.0f, 0.1f);
+    public LayerMask groundLayer;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("Movement Settings")]
+    public float moveSpeed = 8f;
+    public float maxJumpHeight = 5f;
+    public float maxJumpTime = 1f;
+    public float ceilingCheckDistance = 0.6f;
+
+    [Header("Wall Check")]
+    public float wallCheckDistance = 0.55f;
+
+    private bool grounded;
+
+    private float gravity;
+    private Vector3 startingPosition;
+    private bool onLadder = false;
+    public float climbSpeed = 3f;
+
+
+    private void Awake()
     {
-
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && canJump)
-        {
-            Jump();
-        }
-        if (Input.GetKeyUp(KeyCode.Space) && canJump)
-        {
-            currentJumpForce = jumpForce;
-            jumpForce = maxJumpForce;
-            Jump();
-            jumpForce = currentJumpForce;
-        }
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)){
-            MoveLeft();
-        }
-        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)){
-            MoveRight();
-        }
-        if((Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) && canJump){
-            cat.linearVelocity = Vector2.zero;
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            cat.linearVelocity = Vector2.zero;
-            cat.transform.position = respawnPoint.transform.position;
-        }
+        jumpForce = 2f * maxJumpHeight / (maxJumpTime / 2f);
+        gravity = -2f * maxJumpHeight / Mathf.Pow(maxJumpTime / 2f, 2f);
+        startingPosition = transform.position;
     }
 
-    void MoveRight()
+    private void Update()
     {
-        if(cat.linearVelocityX < speedLimit)
-        {
-            cat.linearVelocityX += acceleration;
-        }   
-    }
+        inputAxis = Input.GetAxis("Horizontal");
 
-    void MoveLeft()
-    {
-        if(cat.linearVelocityX > -speedLimit)
+        // Wall check
+        bool hittingWallRight = Physics2D.Raycast(transform.position, Vector2.right, wallCheckDistance, groundLayer);
+        bool hittingWallLeft = Physics2D.Raycast(transform.position, Vector2.left, wallCheckDistance, groundLayer);
+
+        // Block velocity if hitting wall
+        if ((velocity.x > 0f && hittingWallRight) || (velocity.x < 0f && hittingWallLeft))
         {
-            cat.linearVelocityX -= acceleration;
+            velocity.x = 0f;
         }
-    }
 
-    // void StopMove(){
-    //     if(cat.linearVelocityX > 0)
-    //     {
-    //         cat.linearVelocityX -= friction;
-    //     } 
-    //     if(cat.linearVelocityX < 0)
-    //     {
-    //         cat.linearVelocityX += friction;
-    //     }
-    // }
+        // Horizontal movement
+        float targetSpeed = inputAxis * moveSpeed;
 
-    void Jump()
+        if (Mathf.Abs(inputAxis) > 0.01f)
+        {
+            float acceleration = grounded ? moveSpeed * 2f : moveSpeed;
+            velocity.x = Mathf.MoveTowards(velocity.x, targetSpeed, acceleration * Time.deltaTime);
+        }
+        else
+        {
+            // Stronger deceleration when idle
+            float deceleration = grounded ? moveSpeed * 10f : moveSpeed * 4f;
+            velocity.x = Mathf.MoveTowards(velocity.x, 0f, deceleration * Time.deltaTime);
+        }
+
+        // Ground check
+        grounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
+
+        // Snap to ground
+        if (grounded && velocity.y < 0f)
+        {
+            velocity.y = -0.1f;
+        }
+
+        // Jump
+        if (grounded && Input.GetButtonDown("Jump"))
+        {
+            velocity.y = jumpForce;
+        }
+
+        // Ceiling check
+        RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
+        if (ceilingHit.collider != null && velocity.y > 0f)
+        {
+            velocity.y = 0f;
+        }
+
+        // Gravity
+        bool isFalling = velocity.y < 0f || !Input.GetButton("Jump");
+        float gravityMultiplier = isFalling ? 2f : 1f;
+        velocity.y += gravity * gravityMultiplier * Time.deltaTime;
+        velocity.y = Mathf.Max(velocity.y, gravity / 2f);
+    
+    if (Input.GetKeyDown(KeyCode.R))
     {
-        cat.linearVelocity = Vector2.up*jumpForce;
-        canJump = false;
+        ResetPlayerPosition();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -91,6 +119,40 @@ public class playerController : MonoBehaviour
             cat.linearVelocity = Vector2.zero;
             cat.transform.position = respawnPoint.transform.position;
         }
-        canJump = true;
+            canJump = true;
+        }
+        if (onLadder)
+            {
+        rb.gravityScale = 0f;
+        velocity.y = Input.GetAxisRaw("Vertical") * climbSpeed;
+        }
+        else
+        {
+            rb.gravityScale = 1f;
+        }
     }
+
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+    }
+
+    private void ResetPlayerPosition()
+{
+    transform.position = startingPosition;
+    velocity = Vector2.zero;
+    rb.linearVelocity = Vector2.zero;
+}
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (other.CompareTag("Ladder"))
+        onLadder = true;
+}
+
+private void OnTriggerExit2D(Collider2D other)
+{
+    if (other.CompareTag("Ladder"))
+        onLadder = false;
+}
+
 }

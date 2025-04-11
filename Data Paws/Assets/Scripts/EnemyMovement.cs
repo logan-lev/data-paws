@@ -4,24 +4,44 @@ public class EnemyMovement : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Rigidbody2D myRigidBody;
-    public Sprite enemySprite;
+    public GameObject respawnPoint;
+    public SpriteRenderer enemySprite;
+    public bool isMovingRight;
     public float runSpeed;
     void Start()
     {
+        runSpeed = 3;
         myRigidBody.linearVelocity = UnityEngine.Vector2.right*runSpeed;
+        isMovingRight = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetPosition();
+        }
+    }
+
+    void ResetPosition(){
+        myRigidBody.transform.position = respawnPoint.transform.position;
+        myRigidBody.linearVelocity = UnityEngine.Vector2.right*runSpeed;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(myRigidBody.linearVelocityX < .5){
-            myRigidBody.linearVelocityX = -myRigidBody.linearVelocityX;
-        }
+            if(isMovingRight){
+                myRigidBody.linearVelocity = UnityEngine.Vector2.left*runSpeed;
+                
+            }
+            else{
+                myRigidBody.linearVelocity = UnityEngine.Vector2.right*runSpeed;
+                
+            }
+            enemySprite.flipX = !enemySprite.flipX;
+            isMovingRight = !isMovingRight;
+            
 
     }
 }

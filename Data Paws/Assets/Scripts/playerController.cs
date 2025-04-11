@@ -88,7 +88,8 @@ public class playerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Enemy"){
-            logic.playerDeath();
+            cat.linearVelocity = Vector2.zero;
+            cat.transform.position = respawnPoint.transform.position;
         }
         canJump = true;
     }

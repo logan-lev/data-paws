@@ -12,6 +12,11 @@ TagManager:
   - Hole2
   - Hole3
   - Hole4
+  - Box1
+  - Box2
+  - Box3
+  - Box4
+  - Box
   layers:
   - Default
   - TransparentFX

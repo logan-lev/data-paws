@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float maxJumpForce = 10f;
     public float speedLimit = 3f;
     public float friction = 2f;
-    private bool canJump = true;
+    //private bool canJump = true;
     private float currentJumpForce;
     private Rigidbody2D rb;
     private Vector2 velocity;
@@ -90,10 +90,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Jump
-        if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
-        {
-            velocity.y = jumpForce;
-        }
+        if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
+{
+    velocity.y = jumpForce;
+}
+
 
         // Ceiling check
         RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
@@ -103,24 +104,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Gravity
-        bool isFalling = velocity.y < 0f || !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W));
+        bool isFalling = velocity.y < 0f || !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space));
         float gravityMultiplier = isFalling ? 2f : 1f;
         velocity.y += gravity * gravityMultiplier * Time.deltaTime;
         velocity.y = Mathf.Max(velocity.y, gravity / 2f);
     
-    if (Input.GetKeyDown(KeyCode.R))
-    {
-        ResetPlayerPosition();
-    }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Enemy"){
-            cat.linearVelocity = Vector2.zero;
-            cat.transform.position = respawnPoint.transform.position;
-        }
-            canJump = true;
-        }
         if (onLadder)
             {
         rb.gravityScale = 0f;
@@ -137,12 +126,6 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
-    private void ResetPlayerPosition()
-{
-    transform.position = startingPosition;
-    velocity = Vector2.zero;
-    rb.linearVelocity = Vector2.zero;
-}
 private void OnTriggerEnter2D(Collider2D other)
 {
     if (other.CompareTag("Ladder"))
@@ -154,5 +137,11 @@ private void OnTriggerExit2D(Collider2D other)
     if (other.CompareTag("Ladder"))
         onLadder = false;
 }
-
+void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy"){
+            cat.linearVelocity = Vector2.zero;
+            cat.transform.position = respawnPoint.transform.position;
+        }
+    }
 }

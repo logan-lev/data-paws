@@ -5,10 +5,13 @@ public class SideScrollingCamera : MonoBehaviour
 {
     public Transform trackedObject;
     public float followSpeed = 5f;
+    public bool cameraFollowEnabled = true;
+
+
 
     [Header("Dead Zone Margins")]
-    public float horizontalMargin = 2f;  // How far the player can move left/right before camera moves
-    public float verticalMargin = 2f;    // How far the player can move up/down before camera moves
+    public float horizontalMargin = 2f;
+    public float verticalMargin = 2f;
 
     private Camera cam;
 
@@ -19,19 +22,16 @@ public class SideScrollingCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (trackedObject == null) return;
+        if (!cameraFollowEnabled || trackedObject == null) return;
 
         Vector3 currentPos = transform.position;
         Vector3 targetPos = currentPos;
 
-        // Get camera bounds in world units
         float halfHeight = cam.orthographicSize;
         float halfWidth = cam.aspect * halfHeight;
 
-        // Get player's offset from camera center
         Vector2 delta = trackedObject.position - currentPos;
 
-        // Horizontal dead zone
         if (delta.x > horizontalMargin)
         {
             targetPos.x += delta.x - horizontalMargin;
@@ -41,7 +41,6 @@ public class SideScrollingCamera : MonoBehaviour
             targetPos.x += delta.x + horizontalMargin;
         }
 
-        // Vertical dead zone
         if (delta.y > verticalMargin)
         {
             targetPos.y += delta.y - verticalMargin;
@@ -51,7 +50,6 @@ public class SideScrollingCamera : MonoBehaviour
             targetPos.y += delta.y + verticalMargin;
         }
 
-        // Smooth follow
         transform.position = Vector3.Lerp(currentPos, targetPos, followSpeed * Time.deltaTime);
     }
 

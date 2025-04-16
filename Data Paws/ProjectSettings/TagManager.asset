@@ -4,11 +4,19 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Enemy
+  - Logic
+  - Floor
   - Ladder
   - Hole1
   - Hole2
   - Hole3
   - Hole4
+  - Box1
+  - Box2
+  - Box3
+  - Box4
+  - Box
   layers:
   - Default
   - TransparentFX
@@ -16,7 +24,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 

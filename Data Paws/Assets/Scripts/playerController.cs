@@ -4,6 +4,15 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
+    public Rigidbody2D cat;
+    public GameObject respawnPoint;
+    public float acceleration = 1f;
+    public float jumpForce = 5f;
+    public float maxJumpForce = 10f;
+    public float speedLimit = 3f;
+    public float friction = 2f;
+    //private bool canJump = true;
+    private float currentJumpForce;
     private Rigidbody2D rb;
     private Vector2 velocity;
     private float inputAxis;
@@ -24,7 +33,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool grounded;
 
-    private float jumpForce;
     private float gravity;
     private Vector3 startingPosition;
     private bool onLadder = false;
@@ -82,10 +90,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Jump
-        if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
-        {
-            velocity.y = jumpForce;
-        }
+        if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
+{
+    velocity.y = jumpForce;
+}
+
 
         // Ceiling check
         RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
@@ -95,25 +104,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Gravity
-        bool isFalling = velocity.y < 0f || !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W));
+        bool isFalling = velocity.y < 0f || !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space));
         float gravityMultiplier = isFalling ? 2f : 1f;
         velocity.y += gravity * gravityMultiplier * Time.deltaTime;
         velocity.y = Mathf.Max(velocity.y, gravity / 2f);
     
-    if (Input.GetKeyDown(KeyCode.R))
-    {
-        ResetPlayerPosition();
-    }
 
-    if (onLadder)
-{
-    rb.gravityScale = 0f;
-    velocity.y = Input.GetAxisRaw("Vertical") * climbSpeed;
-}
-else
-{
-    rb.gravityScale = 1f;
-}
+        if (onLadder)
+            {
+        rb.gravityScale = 0f;
+        velocity.y = Input.GetAxisRaw("Vertical") * climbSpeed;
+        }
+        else
+        {
+            rb.gravityScale = 1f;
+        }
     }
 
     private void FixedUpdate()
@@ -121,12 +126,6 @@ else
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
-    private void ResetPlayerPosition()
-{
-    transform.position = startingPosition;
-    velocity = Vector2.zero;
-    rb.linearVelocity = Vector2.zero;
-}
 private void OnTriggerEnter2D(Collider2D other)
 {
     if (other.CompareTag("Ladder"))
@@ -138,5 +137,11 @@ private void OnTriggerExit2D(Collider2D other)
     if (other.CompareTag("Ladder"))
         onLadder = false;
 }
-
+void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy"){
+            cat.linearVelocity = Vector2.zero;
+            cat.transform.position = respawnPoint.transform.position;
+        }
+    }
 }

@@ -1,147 +1,101 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    public Rigidbody2D cat;
-    public GameObject respawnPoint;
-    public float acceleration = 1f;
-    public float jumpForce = 5f;
-    public float maxJumpForce = 10f;
-    public float speedLimit = 3f;
-    public float friction = 2f;
-    //private bool canJump = true;
-    private float currentJumpForce;
-    private Rigidbody2D rb;
-    private Vector2 velocity;
-    private float inputAxis;
-
-    [Header("Ground Detection")]
-    public Transform groundCheck;
-    public Vector2 groundCheckSize = new Vector2(1.0f, 0.1f);
-    public LayerMask groundLayer;
-
     [Header("Movement Settings")]
     public float moveSpeed = 8f;
-    public float maxJumpHeight = 5f;
-    public float maxJumpTime = 1f;
-    public float ceilingCheckDistance = 0.6f;
+    public float jumpForce = 16f;
 
-    [Header("Wall Check")]
-    public float wallCheckDistance = 0.55f;
+    [Header("Ground Check Settings")]
+    public Transform groundCheckPoint;
+    public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f);
+    public LayerMask groundLayer;
 
-    private bool grounded;
+    [Header("Wall Check Settings")]
+    public Transform wallCheckPoint;
+    public Vector2 wallCheckSize = new Vector2(0.1f, 0.5f);
 
-    private float gravity;
-    private Vector3 startingPosition;
-    private bool onLadder = false;
-    public float climbSpeed = 3f;
+    private Rigidbody2D rb;
+    private bool isGrounded;
+    private bool touchingWall;
+    private float moveInput;
 
+    public Transform respawnPoint;
 
-    private void Awake()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void Start()
+    void Update()
     {
-        jumpForce = 2f * maxJumpHeight / (maxJumpTime / 2f);
-        gravity = -2f * maxJumpHeight / Mathf.Pow(maxJumpTime / 2f, 2f);
-        startingPosition = transform.position;
+        // --- Get Horizontal Input from Keys ---
+        moveInput = 0f;
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            moveInput = -1f;
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            moveInput = 1f;
+
+        // --- Jump Input ---
+        if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
     }
 
-    private void Update()
+    void FixedUpdate()
     {
-        inputAxis = Input.GetAxis("Horizontal");
+        // --- Move Player ---
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        // Wall check
-        bool hittingWallRight = Physics2D.Raycast(transform.position, Vector2.right, wallCheckDistance, groundLayer);
-        bool hittingWallLeft = Physics2D.Raycast(transform.position, Vector2.left, wallCheckDistance, groundLayer);
+        // --- Ground Check ---
+        isGrounded = Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0f, groundLayer);
 
-        // Block velocity if hitting wall
-        if ((velocity.x > 0f && hittingWallRight) || (velocity.x < 0f && hittingWallLeft))
+        // --- Wall Check ---
+        touchingWall = Physics2D.OverlapBox(wallCheckPoint.position, wallCheckSize, 0f, groundLayer);
+
+        // --- Fix sticking to wall ---
+        if (touchingWall && !isGrounded)
         {
-            velocity.x = 0f;
-        }
-
-        // Horizontal movement
-        float targetSpeed = inputAxis * moveSpeed;
-
-        if (Mathf.Abs(inputAxis) > 0.01f)
-        {
-            float acceleration = grounded ? moveSpeed * 2f : moveSpeed;
-            velocity.x = Mathf.MoveTowards(velocity.x, targetSpeed, acceleration * Time.deltaTime);
-        }
-        else
-        {
-            // Stronger deceleration when idle
-            float deceleration = grounded ? moveSpeed * 10f : moveSpeed * 4f;
-            velocity.x = Mathf.MoveTowards(velocity.x, 0f, deceleration * Time.deltaTime);
-        }
-
-        // Ground check
-        grounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
-
-        // Snap to ground
-        if (grounded && velocity.y < 0f)
-        {
-            velocity.y = -0.1f;
-        }
-
-        // Jump
-        if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
-{
-    velocity.y = jumpForce;
-}
-
-
-        // Ceiling check
-        RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
-        if (ceilingHit.collider != null && velocity.y > 0f)
-        {
-            velocity.y = 0f;
-        }
-
-        // Gravity
-        bool isFalling = velocity.y < 0f || !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space));
-        float gravityMultiplier = isFalling ? 2f : 1f;
-        velocity.y += gravity * gravityMultiplier * Time.deltaTime;
-        velocity.y = Mathf.Max(velocity.y, gravity / 2f);
-    
-
-        if (onLadder)
+            if (rb.linearVelocity.y > 0)
             {
-        rb.gravityScale = 0f;
-        velocity.y = Input.GetAxisRaw("Vertical") * climbSpeed;
+                // If going up into a wall, stop vertical velocity a little
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+            }
+            else
+            {
+                // If sliding down against wall, fall faster
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -15f);
+            }
         }
-        else
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheckPoint != null)
         {
-            rb.gravityScale = 1f;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);
+        }
+        if (wallCheckPoint != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube(wallCheckPoint.position, wallCheckSize);
         }
     }
 
-    private void FixedUpdate()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+        if (collision.CompareTag("Obstacle"))
+        {
+            Respawn();
+        }
     }
 
-private void OnTriggerEnter2D(Collider2D other)
-{
-    if (other.CompareTag("Ladder"))
-        onLadder = true;
-}
-
-private void OnTriggerExit2D(Collider2D other)
-{
-    if (other.CompareTag("Ladder"))
-        onLadder = false;
-}
-void OnCollisionEnter2D(Collision2D collision)
+    void Respawn()
     {
-        if(collision.gameObject.tag == "Enemy"){
-            cat.linearVelocity = Vector2.zero;
-            cat.transform.position = respawnPoint.transform.position;
-        }
+        rb.linearVelocity = Vector2.zero; // Cancel current motion
+        transform.position = respawnPoint.position; // Teleport to checkpoint
     }
 }

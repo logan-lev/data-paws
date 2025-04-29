@@ -7,7 +7,6 @@ TagManager:
   - Enemy
   - Logic
   - Floor
-  - Ladder
   - Hole1
   - Hole2
   - Hole3
@@ -17,6 +16,7 @@ TagManager:
   - Box3
   - Box4
   - Box
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -51,6 +51,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1824364231
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

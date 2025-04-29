@@ -9,9 +9,9 @@ public class PuzzleManager : MonoBehaviour
     public Camera mainCamera;
     public Transform player;
     public GameObject door;
-    public BoxHole[] holes;
-    public GameObject[] boxes;
-    public Transform[] boxStartPositions;
+    public Rock_Hole[] holes;
+    public GameObject[] rocks;
+    public Transform[] rockStartPositions;
 
     private Vector3 originalCameraPos;
     private float originalZoom;
@@ -24,7 +24,7 @@ public class PuzzleManager : MonoBehaviour
 
     [Header("Pickup Settings")]
     public Transform holdPoint;
-    private GameObject heldBox;
+    private GameObject heldRock;
 
     [Header("UI")]
     public GameObject pickupPrompt;
@@ -62,7 +62,7 @@ public class PuzzleManager : MonoBehaviour
     ReturnCameraToPlayer();
 }
 
-        HandleBoxPickup();
+        HandleRockPickup();
     }
 
     public void StartPuzzleCheckpoint(Transform checkpoint)
@@ -87,41 +87,64 @@ public class PuzzleManager : MonoBehaviour
         puzzleBarrier.SetActive(true);
 }
 
-    void ResetPuzzle()
+    public void ResetPuzzle()
+{
+    if (heldRock != null)
     {
-        if (heldBox != null)
+        DropRock();
+    }
+
+    // Reset player position and velocity
+    player.position = currentCheckpoint;
+    Vector3 pos = player.transform.position;
+    pos.z = 0f;
+    player.transform.position = pos;
+
+    Rigidbody2D prb = player.GetComponent<Rigidbody2D>();
+    if (prb) prb.linearVelocity = Vector2.zero;
+
+    // Reset each rock
+    for (int i = 0; i < rocks.Length; i++)
+    {
+        GameObject rock = rocks[i];
+        Transform resetPos = rockStartPositions[i];
+
+        rock.transform.position = resetPos.position;
+        rock.SetActive(true);
+
+        Rigidbody2D rb = rock.GetComponent<Rigidbody2D>();
+        if (rb)
         {
-            DropBox();
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.simulated = true;
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
         }
 
-        player.position = currentCheckpoint;
-        Vector3 pos = player.transform.position;
-        pos.z = 0f;
-        player.transform.position = pos;
-
-        Rigidbody2D prb = player.GetComponent<Rigidbody2D>();
-        if (prb) prb.linearVelocity = Vector2.zero;
-
-        for (int i = 0; i < boxes.Length; i++)
+        Collider2D col = rock.GetComponent<Collider2D>();
+        if (col)
         {
-            boxes[i].transform.position = boxStartPositions[i].position;
-            boxes[i].SetActive(true);
+            col.enabled = true;
+        }
 
-            Rigidbody2D rb = boxes[i].GetComponent<Rigidbody2D>();
-            if (rb) rb.linearVelocity = Vector2.zero;
+        Rock_Identifier id = rock.GetComponent<Rock_Identifier>();
+        if (id)
+        {
+            id.isSnapped = false;
         }
     }
+}
 
     bool IsPuzzleSolved()
     {
-        foreach (BoxHole hole in holes)
+        foreach (Rock_Hole hole in holes)
         {
             if (!hole.isCorrect) return false;
         }
         return true;
     }
 
-    void HandleBoxPickup()
+    void HandleRockPickup()
 {
     if (puzzleComplete) return;
         float moveInput = Input.GetAxisRaw("Horizontal");
@@ -130,21 +153,27 @@ public class PuzzleManager : MonoBehaviour
             lastFacingDirection = moveInput > 0 ? 1 : -1;
         }
 
-        if (heldBox == null)
+        if (heldRock == null)
         {
-            bool nearBox = false;
+            bool nearRock = false;
             Collider2D[] hits = Physics2D.OverlapCircleAll(player.position, 1.5f);
             foreach (var hit in hits)
             {
-                if (hit.CompareTag("Box"))
+                if (hit.CompareTag("Rock"))
                 {
-                    nearBox = true;
+                    Rock_Identifier id = hit.GetComponent<Rock_Identifier>();
+                    if (id == null || id.isSnapped)
+                    {
+                        continue;
+                    }
+            
+                    nearRock = true;
                     break;
                 }
             }
 
             if (pickupPrompt != null)
-                pickupPrompt.SetActive(nearBox);
+                pickupPrompt.SetActive(nearRock);
         }
         else
         {
@@ -154,28 +183,34 @@ public class PuzzleManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (heldBox == null)
+            if (heldRock == null)
             {
                 Collider2D[] hits = Physics2D.OverlapCircleAll(player.position, 1.5f);
                 foreach (var hit in hits)
                 {
-                    if (hit.CompareTag("Box"))
+                    if (hit.CompareTag("Rock"))
                     {
-                        heldBox = hit.gameObject;
-
-                        float boxHeight = 1f;
-                        Collider2D col = heldBox.GetComponent<Collider2D>();
-                        if (col != null)
+                        Rock_Identifier id = hit.GetComponent<Rock_Identifier>();
+                        if (id != null && id.isSnapped)
                         {
-                            boxHeight = col.bounds.size.y;
+                            continue;
                         }
 
-                        Vector3 pickupPos = player.position + new Vector3(0f, 1f + (boxHeight / 2f), 0f);
-                        heldBox.transform.position = pickupPos;
+                        heldRock = hit.gameObject;
 
-                        heldBox.transform.SetParent(holdPoint);
+                        float rockHeight = 1f;
+                        Collider2D col = heldRock.GetComponent<Collider2D>();
+                        if (col != null)
+                        {
+                            rockHeight = col.bounds.size.y;
+                        }
 
-                        Rigidbody2D rb = heldBox.GetComponent<Rigidbody2D>();
+                        Vector3 pickupPos = player.position + new Vector3(0f, 1f + (rockHeight / 2f), 0f);
+                        heldRock.transform.position = pickupPos;
+
+                        heldRock.transform.SetParent(holdPoint);
+
+                        Rigidbody2D rb = heldRock.GetComponent<Rigidbody2D>();
                         if (rb) rb.simulated = false;
                         if (col) col.enabled = false;
 
@@ -185,30 +220,30 @@ public class PuzzleManager : MonoBehaviour
             }
             else
             {
-                DropBox();
+                DropRock();
             }
         }
     }
 
-    void DropBox()
+    void DropRock()
     {
-        heldBox.transform.SetParent(null);
+        heldRock.transform.SetParent(null);
 
-        float boxHeightOffset = 0.5f;
-        Collider2D col = heldBox.GetComponent<Collider2D>();
+        float rockHeightOffset = 0.5f;
+        Collider2D col = heldRock.GetComponent<Collider2D>();
         if (col != null)
         {
-            boxHeightOffset = col.bounds.extents.y;
+            rockHeightOffset = col.bounds.extents.y;
         }
 
-        Vector3 dropOffset = new Vector3(1.5f * lastFacingDirection, boxHeightOffset, 0f);
-        heldBox.transform.position = player.position + dropOffset;
+        Vector3 dropOffset = new Vector3(3f * lastFacingDirection, rockHeightOffset, 0f);
+        heldRock.transform.position = player.position + dropOffset;
 
-        Rigidbody2D rb = heldBox.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb = heldRock.GetComponent<Rigidbody2D>();
         if (rb) rb.simulated = true;
         if (col != null) col.enabled = true;
 
-        heldBox = null;
+        heldRock = null;
     }
 
     public void ReturnCameraToPlayer()

@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Wall Check Settings")]
     public Transform wallCheckPoint;
-    public Vector2 wallCheckSize = new Vector2(0.1f, 0.5f);
+    private Vector2 wallCheckSize = new Vector2(1f, 1f);
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private float moveInput;
 
     public Transform respawnPoint;
+    public PuzzleManager puzzleManager;
 
     void Awake()
     {
@@ -66,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 // If sliding down against wall, fall faster
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -15f);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -3f);
             }
         }
     }
@@ -91,11 +92,16 @@ public class PlayerMovement : MonoBehaviour
         {
             Respawn();
         }
+
+        if (collision.CompareTag("Checkpoint"))
+        {
+            puzzleManager.ResetPuzzle();
+        }
     }
 
     void Respawn()
     {
         rb.linearVelocity = Vector2.zero; // Cancel current motion
-        transform.position = respawnPoint.position; // Teleport to checkpoint
+        transform.position = respawnPoint.position; // Teleport to respawn
     }
 }

@@ -101,6 +101,12 @@ public class PlayerMovement : MonoBehaviour
         if (collision.CompareTag("Exit"))
         {
             puzzleManager.ReturnCameraToPlayer();
+
+            Collider2D col = collision.GetComponent<Collider2D>();
+            if (col != null)
+            {
+                col.enabled = false;
+            }
         }
     }
 

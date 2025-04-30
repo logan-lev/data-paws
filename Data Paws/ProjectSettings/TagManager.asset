@@ -12,6 +12,7 @@ TagManager:
   - Rock
   - Enemy
   - Checkpoint
+  - Exit
   layers:
   - Default
   - TransparentFX

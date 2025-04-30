@@ -97,6 +97,11 @@ public class PlayerMovement : MonoBehaviour
         {
             puzzleManager.ResetPuzzle();
         }
+
+        if (collision.CompareTag("Exit"))
+        {
+            puzzleManager.ReturnCameraToPlayer();
+        }
     }
 
     void Respawn()

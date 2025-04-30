@@ -4,19 +4,15 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Enemy
-  - Logic
-  - Floor
-  - Ladder
   - Hole1
   - Hole2
   - Hole3
   - Hole4
-  - Box1
-  - Box2
-  - Box3
-  - Box4
-  - Box
+  - Obstacle
+  - Rock
+  - Enemy
+  - Checkpoint
+  - Exit
   layers:
   - Default
   - TransparentFX
@@ -51,6 +47,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1824364231
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

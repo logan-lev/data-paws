@@ -17,6 +17,7 @@ TagManager:
   - Box3
   - Box4
   - Box
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -25,8 +26,8 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - 
-  - 
+  - Item
+  - Node
   - 
   - 
   - 

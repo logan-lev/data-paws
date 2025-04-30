@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Wall Check Settings")]
     public Transform wallCheckPoint;
-    private Vector2 wallCheckSize = new Vector2(1f, 1f);
+    private Vector2 wallCheckSize = new Vector2(2f, 1f);
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -24,9 +24,12 @@ public class PlayerMovement : MonoBehaviour
     public Transform respawnPoint;
     public PuzzleManager puzzleManager;
 
+    private Animator animator;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -43,6 +46,19 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
+
+        animator.SetBool("isWalking", moveInput != 0 && isGrounded);
+        animator.SetBool("isJumping", !isGrounded);
+
+        if (moveInput > 0)
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f); // Facing right
+        }
+        else if (moveInput < 0)
+        {
+            transform.localScale = new Vector3(-1f, 1f, 1f); // Facing left
+        }
+
     }
 
     void FixedUpdate()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -107,6 +108,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 col.enabled = false;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene("Pause Screen");
         }
     }
 

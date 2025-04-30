@@ -16571,8 +16571,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u2190 or A: Move Left\n\u2192 or D: Move Right\n\u2191 or W: Jump\nR:
-    Restart"
+  m_text: "\u2190 or A: Move Left\n\u2192 or D: Move Right\n\u2191 or W or Space:
+    Jump\nR: Restart\nP: Pause to Exit"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

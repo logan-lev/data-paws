@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -91,9 +92,9 @@ public class PlayerMovement : MonoBehaviour
 
         // Jump
         if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
-{
-    velocity.y = jumpForce;
-}
+        {
+            velocity.y = jumpForce;
+        }
 
 
         // Ceiling check
@@ -119,6 +120,11 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = 1f;
         }
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene("Pause Screen");
+        }
     }
 
     private void FixedUpdate()
@@ -126,18 +132,18 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
-private void OnTriggerEnter2D(Collider2D other)
-{
-    if (other.CompareTag("Ladder"))
-        onLadder = true;
-}
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Ladder"))
+            onLadder = true;
+    }
 
-private void OnTriggerExit2D(Collider2D other)
-{
-    if (other.CompareTag("Ladder"))
-        onLadder = false;
-}
-void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Ladder"))
+            onLadder = false;
+    }
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Enemy"){
             cat.linearVelocity = Vector2.zero;

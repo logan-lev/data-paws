@@ -4,10 +4,6 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Enemy
-  - Logic
-  - Floor
-  - Ladder
   - Hole1
   - Hole2
   - Hole3
@@ -18,6 +14,11 @@ TagManager:
   - Box4
   - Box
   - NPC
+  - Obstacle
+  - Rock
+  - Enemy
+  - Checkpoint
+  - Exit
   layers:
   - Default
   - TransparentFX
@@ -28,6 +29,8 @@ TagManager:
   - Enemy
   - NPC
   - 
+  - Item
+  - Node
   - 
   - 
   - 
@@ -52,6 +55,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Sky
+    uniqueID: 286461267
+    locked: 0
+  - name: Background
+    uniqueID: 1824364231
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

@@ -138,20 +138,29 @@ float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
 
     private void OnTriggerEnter2D(Collider2D collision)
 {
+
     if (collision.CompareTag("Obstacle"))
-    {
-        if (puzzleManager != null)
         {
+            deathSFX.Play();
+            Respawn();
+        }
+
+        if (collision.CompareTag("Checkpoint"))
+        {
+            deathSFX.Play();
             puzzleManager.ResetPuzzle();
         }
 
-        if (treeManager != null)
+        if (collision.CompareTag("Exit"))
         {
-            treeManager.ResetPuzzle();
+            puzzleManager.ReturnCameraToPlayer();
+
+            Collider2D col = collision.GetComponent<Collider2D>();
+            if (col != null)
+            {
+                col.enabled = false;
+            }
         }
-        deathSFX.Play();
-        Respawn();
-    }
 }
 
     private void OnDrawGizmosSelected()

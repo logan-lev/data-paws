@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pitfall_tileset 2_0: -3016483025255103023
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -44,6 +44,12 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
+
+        // --- Pause ---
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene("Pause Screen");
+        }
     }
 
     void FixedUpdate()
@@ -108,11 +114,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 col.enabled = false;
             }
-        }
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            SceneManager.LoadScene("Pause Screen");
         }
     }
 

@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      postoffice_tileset 2_0: -2390237353484981480
+      postoffice_tileset 2_1: -8617836858440931861
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

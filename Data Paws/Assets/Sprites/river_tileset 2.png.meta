@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      river_tileset 2_0: 5097894603047065843
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

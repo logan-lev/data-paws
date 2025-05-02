@@ -9,6 +9,9 @@ public class PlayerMovement : MonoBehaviour
     public PuzzleManager puzzleManager;
     public TreeManager treeManager;
 
+    public AudioSource jumpSFX;
+    public AudioSource landingSFX;
+    public AudioSource deathSFX;
 
     public float acceleration = 1f;
     public float jumpForce = 5f;
@@ -92,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
 {
+    jumpSFX.Play();
     velocity.y = jumpForce;
     isJumpingHeld = true;
 }
@@ -145,7 +149,7 @@ float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
         {
             treeManager.ResetPuzzle();
         }
-
+        deathSFX.Play();
         Respawn();
     }
 }

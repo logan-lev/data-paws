@@ -12,6 +12,10 @@ public class PuzzleManager : MonoBehaviour
     public GameObject[] rocks;
     public Transform[] rockStartPositions;
 
+
+    public AudioSource puzzleFailSFX;
+    public AudioSource puzzlePassSFX;
+
     private Vector3 originalCameraPos;
     private float originalZoom;
     private Vector3 currentCheckpoint;
@@ -48,7 +52,7 @@ public class PuzzleManager : MonoBehaviour
         if (IsPuzzleSolved())
         {
             puzzleComplete = true;
-
+            puzzlePassSFX.Play();
             if (pickupPrompt != null)
             {
                 pickupPrompt.SetActive(false);
@@ -87,10 +91,12 @@ public class PuzzleManager : MonoBehaviour
         }
 
         // Reset player position and velocity
+        puzzleFailSFX.Play();
         player.position = currentCheckpoint;
         Vector3 pos = player.transform.position;
         pos.z = 0f;
         player.transform.position = pos;
+        
 
         Rigidbody2D prb = player.GetComponent<Rigidbody2D>();
         if (prb) prb.linearVelocity = Vector2.zero;
@@ -144,6 +150,7 @@ public class PuzzleManager : MonoBehaviour
         
         if (correctHole == 4)
         {
+            
             return true;
         }
         else

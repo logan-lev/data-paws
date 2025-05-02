@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     public AudioSource jumpSFX;
     public AudioSource landingSFX;
+    public AudioSource deathSFX;
     private Animator animator;
 
     void Awake()
@@ -110,6 +111,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.CompareTag("Obstacle"))
         {
             Respawn();
+            deathSFX.Play();
         }
 
         if (collision.CompareTag("Ground"))

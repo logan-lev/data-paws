@@ -8,11 +8,18 @@ TagManager:
   - Hole2
   - Hole3
   - Hole4
+  - Box1
+  - Box2
+  - Box3
+  - Box4
+  - Box
+  - NPC
   - Obstacle
   - Rock
   - Enemy
   - Checkpoint
   - Exit
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -21,10 +28,10 @@ TagManager:
   - Water
   - UI
   - Enemy
+  - NPC
   - 
-  - 
-  - 
-  - 
+  - Item
+  - Node
   - 
   - 
   - 
@@ -47,6 +54,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Sky
+    uniqueID: 286461267
+    locked: 0
   - name: Background
     uniqueID: 1824364231
     locked: 0

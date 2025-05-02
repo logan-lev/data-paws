@@ -21,11 +21,24 @@ public class EnemyMovement : MonoBehaviour
         {
             ResetPosition();
         }
+        myRigidBody.AddForceX(runSpeed);
+     if(myRigidBody.linearVelocityX == 0){
+            if(isMovingRight){
+                myRigidBody.linearVelocity = UnityEngine.Vector2.left*runSpeed;        
+            }
+            else{
+                myRigidBody.linearVelocity = UnityEngine.Vector2.right*runSpeed;
+            }
+            enemySprite.flipX = !enemySprite.flipX;
+            isMovingRight = !isMovingRight;
+            
+        }
     }
 
     void ResetPosition(){
         myRigidBody.transform.position = respawnPoint.transform.position;
         myRigidBody.linearVelocity = UnityEngine.Vector2.right*runSpeed;
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision)

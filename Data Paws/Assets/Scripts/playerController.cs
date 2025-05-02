@@ -1,120 +1,177 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    public float moveSpeed = 8f;
-    public float jumpForce = 16f;
-
-    [Header("Ground Check Settings")]
-    public Transform groundCheckPoint;
-    public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f);
-    public LayerMask groundLayer;
-
-    [Header("Wall Check Settings")]
-    public Transform wallCheckPoint;
-    private Vector2 wallCheckSize = new Vector2(1f, 1f);
-
-    private Rigidbody2D rb;
-    private bool isGrounded;
-    private bool touchingWall;
-    private float moveInput;
-
+    public Rigidbody2D cat;
     public Transform respawnPoint;
     public PuzzleManager puzzleManager;
+    public TreeManager treeManager;
 
-    void Awake()
+    public AudioSource jumpSFX;
+    public AudioSource landingSFX;
+    public AudioSource deathSFX;
+
+    public float acceleration = 1f;
+    public float jumpForce = 5f;
+    public float maxJumpForce = 10f;
+    public float speedLimit = 3f;
+    public float friction = 2f;
+    private float currentJumpForce;
+    private Rigidbody2D rb;
+    private Vector2 velocity;
+    private float inputAxis;
+
+    [Header("Ground Detection")]
+    public Transform groundCheck;
+    public Vector2 groundCheckSize = new Vector2(1.0f, 0.1f);
+    public LayerMask groundLayer;
+
+    [Header("Movement Settings")]
+    public float moveSpeed = 8f;
+    public float maxJumpHeight = 4f;
+    public float maxJumpTime = 2f;
+    public float ceilingCheckDistance = 0.6f;
+
+    [Header("Wall Check")]
+    public float wallCheckDistance = 0.55f;
+
+    private bool grounded;
+    private bool isJumpingHeld = false;
+
+
+    private float gravity;
+    private Vector3 startingPosition;
+
+    // Animation
+    private Animator animator;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Start()
     {
-        // --- Get Horizontal Input from Keys ---
-        moveInput = 0f;
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            moveInput = -1f;
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            moveInput = 1f;
+        jumpForce = 2f * maxJumpHeight / (maxJumpTime / 2f);
+        gravity = -1.8f * maxJumpHeight / Mathf.Pow(maxJumpTime / 2f, 2f);
+        startingPosition = transform.position;
+    }
 
-        // --- Jump Input ---
-        if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
+    private void Update()
+    {
+        inputAxis = Input.GetAxis("Horizontal");
+
+        // Wall check
+        bool hittingWallRight = Physics2D.Raycast(transform.position, Vector2.right, wallCheckDistance, groundLayer);
+        bool hittingWallLeft = Physics2D.Raycast(transform.position, Vector2.left, wallCheckDistance, groundLayer);
+
+        if ((velocity.x > 0f && hittingWallRight) || (velocity.x < 0f && hittingWallLeft))
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            velocity.x = 0f;
         }
 
-        // --- Pause ---
-        if(Input.GetKeyDown(KeyCode.P))
+        float targetSpeed = inputAxis * moveSpeed;
+
+        if (Mathf.Abs(inputAxis) > 0.01f)
+        {
+            float acceleration = grounded ? moveSpeed * 2f : moveSpeed;
+            velocity.x = Mathf.MoveTowards(velocity.x, targetSpeed, acceleration * Time.deltaTime);
+        }
+        else
+        {
+            float deceleration = grounded ? moveSpeed * 10f : moveSpeed * 4f;
+            velocity.x = Mathf.MoveTowards(velocity.x, 0f, deceleration * Time.deltaTime);
+        }
+
+        grounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
+
+        if (grounded && velocity.y < 0f)
+        {
+            velocity.y = -0.1f;
+        }
+
+        if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
+        {
+        jumpSFX.Play();
+        velocity.y = jumpForce;
+        isJumpingHeld = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
+        {
+        isJumpingHeld = false;
+        }
+
+
+        RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
+        if (ceilingHit.collider != null && velocity.y > 0f)
+        {
+            velocity.y = 0f;
+        }
+
+        bool isFalling = velocity.y < 0f;
+        bool jumpCut = !isJumpingHeld && velocity.y > 0f;
+
+        float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
+
+        velocity.y += gravity * gravityMultiplier * Time.deltaTime;
+        velocity.y = Mathf.Max(velocity.y, gravity / 2f);
+
+        // --- Animator Updates ---
+        animator.SetBool("isWalking", Mathf.Abs(inputAxis) > 0.01f && grounded);
+        animator.SetBool("isJumping", !grounded);
+
+        // --- Flip Sprite ---
+        if (inputAxis > 0)
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        else if (inputAxis < 0)
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+
+        // --- Pause Game ---
+        if (Input.GetKeyDown(KeyCode.P))
         {
             SceneManager.LoadScene("Pause Screen");
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        // --- Move Player ---
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-
-        // --- Ground Check ---
-        isGrounded = Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0f, groundLayer);
-
-        // --- Wall Check ---
-        touchingWall = Physics2D.OverlapBox(wallCheckPoint.position, wallCheckSize, 0f, groundLayer);
-
-        // --- Fix sticking to wall ---
-        if (touchingWall && !isGrounded)
-        {
-            if (rb.linearVelocity.y > 0)
-            {
-                // If going up into a wall, stop vertical velocity a little
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-            }
-            else
-            {
-                // If sliding down against wall, fall faster
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -3f);
-            }
-        }
+        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
-    void OnDrawGizmosSelected()
+    private void OnTriggerEnter2D(Collider2D collision)
+{
+    if (collision.CompareTag("Obstacle"))
     {
-        if (groundCheckPoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(groundCheckPoint.position, groundCheckSize);
-        }
-        if (wallCheckPoint != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireCube(wallCheckPoint.position, wallCheckSize);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Obstacle"))
-        {
-            Respawn();
-        }
-
-        if (collision.CompareTag("Checkpoint"))
+        if (puzzleManager != null)
         {
             puzzleManager.ResetPuzzle();
         }
 
-        if (collision.CompareTag("Exit"))
+        if (treeManager != null)
         {
-            puzzleManager.ReturnCameraToPlayer();
-
-            Collider2D col = collision.GetComponent<Collider2D>();
-            if (col != null)
-            {
-                col.enabled = false;
-            }
+            treeManager.ResetPuzzle();
         }
+        deathSFX.Play();
+        Respawn();
+    }
+}
+
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
+        }
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * wallCheckDistance);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * wallCheckDistance);
     }
 
     void Respawn()

@@ -19,6 +19,7 @@ TagManager:
   - Enemy
   - Checkpoint
   - Exit
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -31,8 +32,6 @@ TagManager:
   - 
   - Item
   - Node
-  - 
-  - 
   - 
   - 
   - 

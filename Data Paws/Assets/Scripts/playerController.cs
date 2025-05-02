@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public Transform respawnPoint;
     public PuzzleManager puzzleManager;
 
+    public AudioSource jumpSFX;
+    public AudioSource landingSFX;
     private Animator animator;
 
     void Awake()
@@ -45,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpSFX.Play();
         }
 
         animator.SetBool("isWalking", moveInput != 0 && isGrounded);
@@ -107,6 +110,12 @@ public class PlayerMovement : MonoBehaviour
         if (collision.CompareTag("Obstacle"))
         {
             Respawn();
+        }
+
+        if (collision.CompareTag("Ground"))
+        {
+            landingSFX.Play();
+
         }
 
         if (collision.CompareTag("Checkpoint"))

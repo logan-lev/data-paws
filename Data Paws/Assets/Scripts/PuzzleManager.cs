@@ -16,6 +16,10 @@ public class PuzzleManager : MonoBehaviour
     public GameObject invisibleWall;
     public GameObject invisibleDoor;
 
+
+    public AudioSource puzzleFailSFX;
+    public AudioSource puzzlePassSFX;
+
     private Vector3 originalCameraPos;
     private float originalZoom;
     private Vector3 currentCheckpoint;
@@ -95,10 +99,12 @@ if (mainCamera != null)
         }
 
         // Reset player position and velocity
+        puzzleFailSFX.Play();
         player.position = currentCheckpoint;
         Vector3 pos = player.transform.position;
         pos.z = 0f;
         player.transform.position = pos;
+        
 
         Rigidbody2D prb = player.GetComponent<Rigidbody2D>();
         if (prb) prb.linearVelocity = Vector2.zero;

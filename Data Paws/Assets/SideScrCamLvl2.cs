@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class SideScrollingCamera : MonoBehaviour
+public class SideScrCamLvl2 : MonoBehaviour
 {
     public Transform trackedObject;
     public float followSpeed = 5f;
@@ -82,3 +82,4 @@ public class SideScrollingCamera : MonoBehaviour
         Gizmos.DrawWireCube(center, size);
     }
 }
+

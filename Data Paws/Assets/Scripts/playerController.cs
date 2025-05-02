@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -94,16 +95,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
-{
-    jumpSFX.Play();
-    velocity.y = jumpForce;
-    isJumpingHeld = true;
-}
+        {
+        jumpSFX.Play();
+        velocity.y = jumpForce;
+        isJumpingHeld = true;
+        }
 
-if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
-{
-    isJumpingHeld = false;
-}
+        if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
+        {
+        isJumpingHeld = false;
+        }
 
 
         RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
@@ -113,9 +114,9 @@ if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKey
         }
 
         bool isFalling = velocity.y < 0f;
-bool jumpCut = !isJumpingHeld && velocity.y > 0f;
+        bool jumpCut = !isJumpingHeld && velocity.y > 0f;
 
-float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
+        float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
 
         velocity.y += gravity * gravityMultiplier * Time.deltaTime;
         velocity.y = Mathf.Max(velocity.y, gravity / 2f);
@@ -129,6 +130,12 @@ float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
             transform.localScale = new Vector3(1f, 1f, 1f);
         else if (inputAxis < 0)
             transform.localScale = new Vector3(-1f, 1f, 1f);
+
+        // --- Pause Game ---
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene("Pause Screen");
+        }
     }
 
     private void FixedUpdate()

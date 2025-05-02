@@ -134,6 +134,7 @@ public class PlayerMovement : MonoBehaviour
         // --- Pause Game ---
         if (Input.GetKeyDown(KeyCode.P))
         {
+            SceneTracker.PreviousSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             SceneManager.LoadScene("Pause Screen");
         }
     }

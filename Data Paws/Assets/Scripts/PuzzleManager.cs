@@ -3,14 +3,18 @@ using System.Collections;
 
 public class PuzzleManager : MonoBehaviour
 {
-    public Transform cameraTargetPosition;
-    public float cameraZoomSize = 8f;
     public float cameraLerpSpeed = 5f;
     public Camera mainCamera;
     public Transform player;
     public Rock_Hole[] holes;
     public GameObject[] rocks;
     public Transform[] rockStartPositions;
+   
+    public Camera zoomedOutCamera;
+
+    [Header("Environment Control")]
+    public GameObject invisibleWall;
+    public GameObject invisibleDoor;
 
     private Vector3 originalCameraPos;
     private float originalZoom;
@@ -39,45 +43,49 @@ public class PuzzleManager : MonoBehaviour
     }
 
     void Update()
+{
+    if (!puzzleComplete && Input.GetKeyDown(KeyCode.R))
     {
-        if (!puzzleComplete && Input.GetKeyDown(KeyCode.R))
-        {
-            ResetPuzzle();
-        }
-
-        if (IsPuzzleSolved())
-        {
-            puzzleComplete = true;
-
-            if (pickupPrompt != null)
-            {
-                pickupPrompt.SetActive(false);
-            }
-
-            ReturnCameraToPlayer();
-        }
-
-        HandleRockPickup();
+        ResetPuzzle();
     }
+
+    HandleRockPickup();
+}
 
     public void StartPuzzleCheckpoint(Transform checkpoint)
-    {
-        if (puzzleStarted || puzzleComplete)
-            return;
+{
+    if (puzzleStarted || puzzleComplete)
+        return;
 
-        puzzleStarted = true;
-        currentCheckpoint = checkpoint.position;
+    puzzleStarted = true;
+    currentCheckpoint = checkpoint.position;
 
-        if (mainCamera != null)
-        {
-            SideScrollingCamera camFollow = mainCamera.GetComponent<SideScrollingCamera>();
-            if (camFollow != null)
-                camFollow.cameraFollowEnabled = false;
+    if (invisibleWall != null)
+    invisibleWall.SetActive(true);
 
-            mainCamera.transform.position = cameraTargetPosition.position;
-            mainCamera.orthographicSize = cameraZoomSize;
-        }
-    }
+    if (invisibleDoor != null)
+    invisibleDoor.SetActive(true);
+
+    if (mainCamera != null)
+        mainCamera.enabled = false;
+
+    if (zoomedOutCamera != null)
+{
+    zoomedOutCamera.enabled = true;
+    zoomedOutCamera.gameObject.SetActive(true);
+}
+
+if (mainCamera != null)
+{
+    mainCamera.enabled = false;
+    mainCamera.gameObject.SetActive(false);
+}
+
+    // Optionally disable main camera follow
+    SideScrollingCamera camFollow = mainCamera.GetComponent<SideScrollingCamera>();
+    if (camFollow != null)
+        camFollow.cameraFollowEnabled = false;
+}
 
     public void ResetPuzzle()
     {
@@ -129,28 +137,6 @@ public class PuzzleManager : MonoBehaviour
         correctHole = 0;
     }
 
-    bool IsPuzzleSolved()
-    {
-
-        correctHole = 0;
-
-        foreach (Rock_Hole hole in holes)
-        {
-            if (hole.isCorrect) 
-            {
-                correctHole++;
-            }
-        }
-        
-        if (correctHole == 4)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 
     void HandleRockPickup()
     {
@@ -254,16 +240,54 @@ public class PuzzleManager : MonoBehaviour
         heldRock = null;
     }
 
-    public void ReturnCameraToPlayer()
+   public void ReturnCameraToPlayer()
+{
+    if (mainCamera != null)
     {
-        if (mainCamera != null)
-        {
-            mainCamera.transform.position = originalCameraPos;
-            mainCamera.orthographicSize = originalZoom;
+        
+        mainCamera.transform.position = new Vector3(
+            player.position.x,
+            player.position.y + 2f,
+            mainCamera.transform.position.z
+        );
 
-            SideScrollingCamera camFollow = mainCamera.GetComponent<SideScrollingCamera>();
-            if (camFollow != null)
-                camFollow.cameraFollowEnabled = true;
-        }
+        mainCamera.enabled = true;
+        mainCamera.gameObject.SetActive(true);
     }
+
+    if (zoomedOutCamera != null)
+    {
+        zoomedOutCamera.enabled = false;
+        zoomedOutCamera.gameObject.SetActive(false);
+    }
+
+    
+    SideScrollingCamera camFollow = mainCamera.GetComponent<SideScrollingCamera>();
+    if (camFollow != null)
+        camFollow.cameraFollowEnabled = true;
+}
+
+public void PuzzleCompleted()
+{
+    if (puzzleComplete) return;
+
+    puzzleComplete = true;
+
+    if (pickupPrompt != null)
+        pickupPrompt.SetActive(false);
+
+    if (invisibleDoor != null)
+    invisibleDoor.SetActive(false);
+
+    ReturnCameraToPlayer();
+}
+public void OnCorrectPlacement()
+{
+    correctHole++;
+
+    if (correctHole >= holes.Length && !puzzleComplete)
+    {
+        PuzzleCompleted();
+    }
+}
 }

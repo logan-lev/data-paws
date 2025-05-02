@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class SideScrollingCamera : MonoBehaviour
+public class SideScrCamLvl1 : MonoBehaviour
 {
     public Transform trackedObject;
     public float followSpeed = 5f;

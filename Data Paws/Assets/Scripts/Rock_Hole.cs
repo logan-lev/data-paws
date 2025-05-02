@@ -46,7 +46,11 @@ public class Rock_Hole : MonoBehaviour
             // Mark this hole as solved
             isCorrect = true;
 
-            Debug.Log($"{gameObject.name} matched and snapped rockID: {id.rockID}");
+            PuzzleManager manager = Object.FindFirstObjectByType<PuzzleManager>();
+if (manager != null)
+{
+    manager.OnCorrectPlacement();
+}
         }
     }
 
@@ -56,7 +60,6 @@ public class Rock_Hole : MonoBehaviour
         if (id != null && id.rockID == correctrockID)
         {
             isCorrect = false;
-            Debug.Log($"{gameObject.name} box exited: {id.rockID}");
         }
     }
 }

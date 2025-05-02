@@ -97,8 +97,6 @@ public class PuzzleManagerlvl2 : MonoBehaviour
             if (normalCamera != null)
                 normalCamera.enabled = true;
 
-            if (invisibleWall != null)
-                invisibleWall.SetActive(false);
         }
     }
 

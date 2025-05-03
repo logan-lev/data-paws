@@ -38,6 +38,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Wall Check")]
     public float wallCheckDistance = 0.55f;
 
+    [Header("Pickup System")]
+    public Transform holdPoint;
+    private PickupItem heldItem;
+    public PuzzleManagerlvl2 puzzleManagerLvl2;
+
     private bool grounded;
     private bool isJumpingHeld = false;
 
@@ -130,12 +135,34 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1f, 1f, 1f);
         else if (inputAxis < 0)
             transform.localScale = new Vector3(-1f, 1f, 1f);
-
-        // --- Pause Game ---
-        if (Input.GetKeyDown(KeyCode.P))
+            
+        if (Input.GetKeyDown(KeyCode.E))
+{
+    if (heldItem == null)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f);
+        foreach (var hit in hits)
         {
-            SceneManager.LoadScene("Pause Screen");
+            PickupItem item = hit.GetComponent<PickupItem>();
+            if (item != null)
+            {
+                heldItem = item;
+                item.PickUp(holdPoint);
+
+                if (puzzleManagerLvl2 != null)
+                    puzzleManagerLvl2.UpdateCurrentItemName(item.GetItemName());
+
+                break;
+            }
         }
+    }
+    else
+    {
+        heldItem.Drop(Vector2.right * transform.localScale.x); // throw direction matches facing
+        heldItem = null;
+    }
+}
+    
     }
 
     private void FixedUpdate()

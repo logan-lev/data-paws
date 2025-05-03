@@ -4,6 +4,6 @@ public class ToSetting : MonoBehaviour
 {
     public void ToSettingScreen()
     {
-        SceneManager.LoadScene("Settings");
+        SceneTransitionManager.instance.LoadScene("Settings");
     }
 }

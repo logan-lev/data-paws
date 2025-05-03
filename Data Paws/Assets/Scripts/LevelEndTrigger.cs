@@ -2,30 +2,23 @@ using UnityEngine;
 
 public class LevelEndTrigger : MonoBehaviour
 {
-    public FadeController fadeController;
     public string nextSceneName = "";
     public bool onlyFade = false;
 
-    private void Awake()
-    {
-        // If fadeController not assigned in Inspector, find the persistent one
-        if (fadeController == null)
-        {
-            fadeController = FindFirstObjectByType<FadeController>();
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && fadeController != null)
+        if (other.CompareTag("Player") && SceneTransitionManager.instance != null)
         {
             if (onlyFade)
             {
-                fadeController.FadeToBlackOnly();
+                // Just fade to black and stay in the current scene
+                SceneTransitionManager.instance.StartCoroutine(
+                    SceneTransitionManager.instance.Fade(0f, 1f)
+                );
             }
-            else
+            else if (!string.IsNullOrEmpty(nextSceneName))
             {
-                fadeController.FadeToScene(nextSceneName);
+                SceneTransitionManager.instance.LoadScene(nextSceneName);
             }
         }
     }

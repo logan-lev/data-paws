@@ -5,6 +5,6 @@ public class ToKeysAdjMenu : MonoBehaviour
 {
     public void LoadKeysAdjMenu()
     {
-        SceneManager.LoadScene("KeyboardAdj");
+        SceneTransitionManager.instance.LoadScene("KeyboardAdj");
     }
 }

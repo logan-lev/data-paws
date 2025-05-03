@@ -8,6 +8,13 @@ public class PickupPromptUI : MonoBehaviour
     public LayerMask itemLayer;
 
     private bool promptShown = false;
+    private void Start()
+{
+    if (pickupPromptText != null)
+        pickupPromptText.gameObject.SetActive(false);
+
+    promptShown = false;
+}
 
     private void Update()
     {

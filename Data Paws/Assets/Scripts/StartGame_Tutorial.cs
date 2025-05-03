@@ -5,6 +5,6 @@ public class TitleSceneController : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("Tutorial");
+        SceneTransitionManager.instance.LoadScene("Tutorial");
     }
 }

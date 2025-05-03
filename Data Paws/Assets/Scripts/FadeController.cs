@@ -80,7 +80,7 @@ public class FadeController : MonoBehaviour
             yield return null;
         }
 
-        SceneManager.LoadScene(sceneName);
+        SceneTransitionManager.instance.LoadScene(sceneName);
     }
     public void FadeToBlackOnly()
 {

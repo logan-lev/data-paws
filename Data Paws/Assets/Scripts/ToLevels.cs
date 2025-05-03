@@ -5,6 +5,6 @@ public class ToLevels : MonoBehaviour
 {
     public void LoadLevelsScene()
     {
-        SceneManager.LoadScene("Levels Page");
+        SceneTransitionManager.instance.LoadScene("Levels Page");
     }
 }

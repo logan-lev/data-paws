@@ -5,6 +5,6 @@ public class backToTitle : MonoBehaviour
 {
     public void BackToTitleScreen()
     {
-        SceneManager.LoadScene("Main Title");
+        SceneTransitionManager.instance.LoadScene("Main Title");
     }
 }

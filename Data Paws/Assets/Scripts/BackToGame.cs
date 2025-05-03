@@ -1,20 +1,27 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Import the SceneManagement namespace to access scene management functions
+using UnityEngine.SceneManagement;
+using System.Collections;
+
 public class BackToGame : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void ResumeGame()
     {
-        
+        StartCoroutine(ResumeFromPause());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator ResumeFromPause()
     {
-     if (Input.GetKeyDown(KeyCode.P))
-     {
-        // Load the game scene when the "P" key is pressed
-        SceneManager.LoadScene("Tutorial"); // Replace "GameScene" with the name of your game scene
-     }   
+        // Optional: Freeze input or play sound here
+
+        yield return SceneTransitionManager.instance.Fade(0f, 1f); // Fade to black
+        yield return new WaitForSeconds(0.3f); // Optional pause for effect
+
+        Scene pauseScene = SceneManager.GetSceneByName("PauseScreen");
+        if (pauseScene.IsValid() && pauseScene.isLoaded)
+        {
+            SceneManager.UnloadSceneAsync(pauseScene); // Unload PauseScreen only
+        }
+
+        yield return SceneTransitionManager.instance.Fade(1f, 0f); // Fade back in
     }
 }

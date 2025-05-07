@@ -81914,6 +81914,7 @@ MonoBehaviour:
   respawnPoint: {fileID: 218791090}
   puzzleManager: {fileID: 701581315}
   treeManager: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   jumpSFX: {fileID: 150592226}
   landingSFX: {fileID: 1774411768}
   deathSFX: {fileID: 91704562}

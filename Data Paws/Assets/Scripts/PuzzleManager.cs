@@ -9,12 +9,20 @@ public class PuzzleManager : MonoBehaviour
     public Rock_Hole[] holes;
     public GameObject[] rocks;
     public Transform[] rockStartPositions;
+    [Header("Pause Settings")]
+public GameObject pausePanel;
+private bool isPaused = false;
+
    
     public Camera zoomedOutCamera;
 
     [Header("Environment Control")]
     public GameObject invisibleWall;
     public GameObject invisibleDoor;
+
+    [Header("Puzzle Barriers")]
+    public GameObject[] RiverCollisions;
+
 
 
     public AudioSource puzzleFailSFX;
@@ -44,6 +52,10 @@ public class PuzzleManager : MonoBehaviour
 
         startingPosition = player.position;         
         currentCheckpoint = startingPosition;   
+
+        pausePanel.SetActive(false);
+    isPaused = false;
+    Time.timeScale = 1f;
     }
 
     void Update()
@@ -54,6 +66,11 @@ public class PuzzleManager : MonoBehaviour
     }
 
     HandleRockPickup();
+
+    if (Input.GetKeyDown(KeyCode.P))
+{
+    TogglePause();
+}
 }
 
     public void StartPuzzleCheckpoint(Transform checkpoint)
@@ -285,6 +302,17 @@ public void PuzzleCompleted()
     if (invisibleDoor != null)
     invisibleDoor.SetActive(false);
 
+    foreach (GameObject river in RiverCollisions)
+{
+    if (river != null)
+    {
+        Collider2D col = river.GetComponent<Collider2D>();
+        if (col != null)
+            col.enabled = false;
+    }
+}
+
+
     ReturnCameraToPlayer();
 }
 public void OnCorrectPlacement()
@@ -295,5 +323,11 @@ public void OnCorrectPlacement()
     {
         PuzzleCompleted();
     }
+}
+public void TogglePause()
+{
+    isPaused = !isPaused;
+    pausePanel.SetActive(isPaused);
+    Time.timeScale = isPaused ? 0f : 1f;
 }
 }

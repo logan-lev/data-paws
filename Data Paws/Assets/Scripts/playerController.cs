@@ -38,6 +38,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Wall Check")]
     public float wallCheckDistance = 0.55f;
 
+    [Header("Pickup System")]
+    public Transform holdPoint;
+    private PickupItem heldItem;
+    public PuzzleManagerlvl2 puzzleManagerLvl2;
+
     private bool grounded;
     private bool isJumpingHeld = false;
 
@@ -130,13 +135,34 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1f, 1f, 1f);
         else if (inputAxis < 0)
             transform.localScale = new Vector3(-1f, 1f, 1f);
-
-        // --- Pause Game ---
-        if (Input.GetKeyDown(KeyCode.P))
+            
+        if (Input.GetKeyDown(KeyCode.E))
+{
+    if (heldItem == null)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f);
+        foreach (var hit in hits)
         {
-            SceneTracker.PreviousSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene("Pause Screen");
+            PickupItem item = hit.GetComponent<PickupItem>();
+            if (item != null)
+            {
+                heldItem = item;
+                item.PickUp(holdPoint);
+
+                if (puzzleManagerLvl2 != null)
+                    puzzleManagerLvl2.UpdateCurrentItemName(item.GetItemName());
+
+                break;
+            }
         }
+    }
+    else
+    {
+        heldItem.Drop(Vector2.right * transform.localScale.x); // throw direction matches facing
+        heldItem = null;
+    }
+}
+    
     }
 
     private void FixedUpdate()
@@ -146,20 +172,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
 {
+
     if (collision.CompareTag("Obstacle"))
-    {
-        if (puzzleManager != null)
         {
+            deathSFX.Play();
+            Respawn();
+        }
+
+        if (collision.CompareTag("Checkpoint"))
+        {
+            deathSFX.Play();
             puzzleManager.ResetPuzzle();
         }
 
-        if (treeManager != null)
+        if (collision.CompareTag("Exit"))
         {
-            treeManager.ResetPuzzle();
+            puzzleManager.ReturnCameraToPlayer();
+
+            Collider2D col = collision.GetComponent<Collider2D>();
+            if (col != null)
+            {
+                col.enabled = false;
+            }
         }
-        deathSFX.Play();
-        Respawn();
-    }
 }
 
     private void OnDrawGizmosSelected()

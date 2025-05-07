@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -36,6 +37,11 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Wall Check")]
     public float wallCheckDistance = 0.55f;
+
+    [Header("Pickup System")]
+    public Transform holdPoint;
+    private PickupItem heldItem;
+    public PuzzleManagerlvl2 puzzleManagerLvl2;
 
     private bool grounded;
     private bool isJumpingHeld = false;
@@ -94,16 +100,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (grounded && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
-{
-    jumpSFX.Play();
-    velocity.y = jumpForce;
-    isJumpingHeld = true;
-}
+        {
+        jumpSFX.Play();
+        velocity.y = jumpForce;
+        isJumpingHeld = true;
+        }
 
-if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
-{
-    isJumpingHeld = false;
-}
+        if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
+        {
+        isJumpingHeld = false;
+        }
 
 
         RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
@@ -113,9 +119,9 @@ if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKey
         }
 
         bool isFalling = velocity.y < 0f;
-bool jumpCut = !isJumpingHeld && velocity.y > 0f;
+        bool jumpCut = !isJumpingHeld && velocity.y > 0f;
 
-float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
+        float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
 
         velocity.y += gravity * gravityMultiplier * Time.deltaTime;
         velocity.y = Mathf.Max(velocity.y, gravity / 2f);
@@ -129,6 +135,34 @@ float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
             transform.localScale = new Vector3(1f, 1f, 1f);
         else if (inputAxis < 0)
             transform.localScale = new Vector3(-1f, 1f, 1f);
+            
+        if (Input.GetKeyDown(KeyCode.E))
+{
+    if (heldItem == null)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f);
+        foreach (var hit in hits)
+        {
+            PickupItem item = hit.GetComponent<PickupItem>();
+            if (item != null)
+            {
+                heldItem = item;
+                item.PickUp(holdPoint);
+
+                if (puzzleManagerLvl2 != null)
+                    puzzleManagerLvl2.UpdateCurrentItemName(item.GetItemName());
+
+                break;
+            }
+        }
+    }
+    else
+    {
+        heldItem.Drop(Vector2.right * transform.localScale.x); // throw direction matches facing
+        heldItem = null;
+    }
+}
+    
     }
 
     private void FixedUpdate()
@@ -138,20 +172,29 @@ float gravityMultiplier = isFalling ? 1.5f : (jumpCut ? 2.5f : 1f);
 
     private void OnTriggerEnter2D(Collider2D collision)
 {
+
     if (collision.CompareTag("Obstacle"))
-    {
-        if (puzzleManager != null)
         {
+            deathSFX.Play();
+            Respawn();
+        }
+
+        if (collision.CompareTag("Checkpoint"))
+        {
+            deathSFX.Play();
             puzzleManager.ResetPuzzle();
         }
 
-        if (treeManager != null)
+        if (collision.CompareTag("Exit"))
         {
-            treeManager.ResetPuzzle();
+            puzzleManager.ReturnCameraToPlayer();
+
+            Collider2D col = collision.GetComponent<Collider2D>();
+            if (col != null)
+            {
+                col.enabled = false;
+            }
         }
-        deathSFX.Play();
-        Respawn();
-    }
 }
 
     private void OnDrawGizmosSelected()

@@ -21,7 +21,7 @@ public class EnemyMovement : MonoBehaviour
         {
             ResetPosition();
         }
-        myRigidBody.AddForceX(runSpeed);
+        // myRigidBody.AddForceX(runSpeed);
      if(myRigidBody.linearVelocityX == 0){
             if(isMovingRight){
                 myRigidBody.linearVelocity = UnityEngine.Vector2.left*runSpeed;        
@@ -35,7 +35,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    void ResetPosition(){
+    public void ResetPosition(){
         myRigidBody.transform.position = respawnPoint.transform.position;
         myRigidBody.linearVelocity = UnityEngine.Vector2.right*runSpeed;
         

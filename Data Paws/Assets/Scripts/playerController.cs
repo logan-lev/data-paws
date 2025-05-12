@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D cat;
+    public BoxCollider2D playerCollide;
     public Transform respawnPoint;
     public PuzzleManager puzzleManager;
     public TreeManager treeManager;
@@ -170,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
+
     private void OnTriggerEnter2D(Collider2D collision)
 {
 
@@ -183,6 +185,10 @@ public class PlayerMovement : MonoBehaviour
         {
             deathSFX.Play();
             puzzleManager.ResetPuzzle();
+        }
+
+        if(collision.CompareTag("PlayerIgnore")){
+            Physics2D.IgnoreCollision(collision, playerCollide);
         }
 
         if (collision.CompareTag("Exit"))

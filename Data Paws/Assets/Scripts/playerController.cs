@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D cat;
+    public CoinScript coinScript;
+    public BoxCollider2D playerCollide;
     public Transform respawnPoint;
     public PuzzleManager puzzleManager;
     public TreeManager treeManager;
@@ -64,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
         jumpForce = 2f * maxJumpHeight / (maxJumpTime / 2f);
         gravity = -1.8f * maxJumpHeight / Mathf.Pow(maxJumpTime / 2f, 2f);
         startingPosition = transform.position;
+        Physics2D.IgnoreLayerCollision(0,11,true);
     }
 
     private void Update()
@@ -109,6 +112,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
         {
         isJumpingHeld = false;
+        }
+
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            coinScript.ResetPosition();
         }
 
 
@@ -168,12 +176,16 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+        
+        Physics2D.IgnoreLayerCollision(0,11);
     }
+
+
 
     private void OnTriggerEnter2D(Collider2D collision)
 {
 
-    if (collision.CompareTag("Obstacle"))
+    if (collision.CompareTag("Obstacle") || collision.CompareTag("Enemy"))
         {
             deathSFX.Play();
             Respawn();
@@ -183,6 +195,10 @@ public class PlayerMovement : MonoBehaviour
         {
             deathSFX.Play();
             puzzleManager.ResetPuzzle();
+        }
+
+        if(collision.CompareTag("PlayerIgnore")){
+            Physics2D.IgnoreCollision(collision, playerCollide,true);
         }
 
         if (collision.CompareTag("Exit"))

@@ -36,8 +36,8 @@ TagManager:
   - Node
   - PlayerIgnore
   - Coin
-  - 
-  - 
+  - Rock
+  - Player
   - 
   - 
   - 
@@ -64,6 +64,12 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Rock
+    uniqueID: 2077337971
+    locked: 0
+  - name: Player
+    uniqueID: 1536626621
     locked: 0
   m_RenderingLayers:
   - Default

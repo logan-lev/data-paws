@@ -90220,63 +90220,6 @@ PolygonCollider2D:
       - {x: 0.90625, y: 0.9186106}
       - {x: 0.90625, y: 1.875}
   m_UseDelaunayMesh: 0
---- !u!1001 &5725054558242199589
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4588768148743944945, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_Name
-      value: CoinComponents
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -15.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8283238857638545233, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1215c94490f69b448badae0b2f3900ec, type: 3}
 --- !u!1001 &6967349396649636129
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90337,6 +90280,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 2107280972626454964, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 1123883856933602501, guid: 0eb94fe71afc2c5419cf737f55bbd6a1, type: 2}
     - target: {fileID: 2617612176719185893, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
       propertyPath: m_SortingLayer
       value: 2
@@ -90345,10 +90292,6 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: 1536626621
       objectReference: {fileID: 0}
-    - target: {fileID: 2107280972626454964, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: 1123883856933602501, guid: 0eb94fe71afc2c5419cf737f55bbd6a1, type: 2}
     - target: {fileID: 3008274945520633938, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
       propertyPath: respawnPoint
       value: 
@@ -90416,4 +90359,3 @@ SceneRoots:
   - {fileID: 535635500}
   - {fileID: 1266996148}
   - {fileID: 404220840}
-  - {fileID: 5725054558242199589}

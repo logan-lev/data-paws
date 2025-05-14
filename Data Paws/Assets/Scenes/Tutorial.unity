@@ -90321,6 +90321,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (Cat)
       objectReference: {fileID: 0}
+    - target: {fileID: 2107280972626454964, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 1123883856933602501, guid: 0eb94fe71afc2c5419cf737f55bbd6a1, type: 2}
     - target: {fileID: 3008274945520633938, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
       propertyPath: respawnPoint
       value: 
@@ -90337,7 +90341,8 @@ PrefabInstance:
       propertyPath: m_ExcludeLayers.m_Bits
       value: 2048
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2107280972626454964, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

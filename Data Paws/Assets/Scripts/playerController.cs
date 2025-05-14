@@ -114,12 +114,6 @@ public class PlayerMovement : MonoBehaviour
         isJumpingHeld = false;
         }
 
-        if (Input.GetKeyUp(KeyCode.R))
-        {
-            coinScript.ResetPosition();
-        }
-
-
         RaycastHit2D ceilingHit = Physics2D.Raycast(transform.position, Vector2.up, ceilingCheckDistance, groundLayer);
         if (ceilingHit.collider != null && velocity.y > 0f)
         {

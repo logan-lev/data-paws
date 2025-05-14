@@ -90321,6 +90321,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (Cat)
       objectReference: {fileID: 0}
+    - target: {fileID: 2107280972626454964, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 3a18556068fa81f49b9b95fc5d2f20e0, type: 3}
+    - target: {fileID: 2107280972626454964, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3a18556068fa81f49b9b95fc5d2f20e0, type: 3}
     - target: {fileID: 3008274945520633938, guid: 9603d0448bc594b63b9983bc9707c158, type: 3}
       propertyPath: respawnPoint
       value: 

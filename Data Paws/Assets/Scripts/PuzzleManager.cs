@@ -6,6 +6,7 @@ public class PuzzleManager : MonoBehaviour
     public float cameraLerpSpeed = 5f;
     public Camera mainCamera;
     public Transform player;
+    public Collider2D playerCollider;
     public Rock_Hole[] holes;
     public GameObject[] rocks;
     public Transform[] rockStartPositions;
@@ -56,6 +57,15 @@ private bool isPaused = false;
         pausePanel.SetActive(false);
     isPaused = false;
     Time.timeScale = 1f;
+
+    foreach (GameObject rock in rocks)
+{
+    Collider2D rockCol = rock.GetComponent<Collider2D>();
+    if (rockCol != null && playerCollider != null)
+    {
+        Physics2D.IgnoreCollision(playerCollider, rockCol, true);
+    }
+}
     }
 
     void Update()
@@ -108,57 +118,23 @@ if (mainCamera != null)
         camFollow.cameraFollowEnabled = false;
 }
 
-    public void ResetPuzzle()
+   public void ResetPuzzle()
+{
+    if (heldRock != null)
     {
-        if (heldRock != null)
-        {
-            DropRock();
-        }
-
-        // Reset player position and velocity
-        puzzleFailSFX.Play();
-        player.position = currentCheckpoint;
-        Vector3 pos = player.transform.position;
-        pos.z = 0f;
-        player.transform.position = pos;
-        
-
-        Rigidbody2D prb = player.GetComponent<Rigidbody2D>();
-        if (prb) prb.linearVelocity = Vector2.zero;
-
-        // Reset each rock
-        for (int i = 0; i < rocks.Length; i++)
-        {
-            GameObject rock = rocks[i];
-            Transform resetPos = rockStartPositions[i];
-
-            rock.transform.position = resetPos.position;
-            rock.SetActive(true);
-
-            Rigidbody2D rb = rock.GetComponent<Rigidbody2D>();
-            if (rb)
-            {
-                rb.bodyType = RigidbodyType2D.Dynamic;
-                rb.simulated = true;
-                rb.linearVelocity = Vector2.zero;
-                rb.angularVelocity = 0f;
-            }
-
-            Collider2D col = rock.GetComponent<Collider2D>();
-            if (col)
-            {
-                col.enabled = true;
-            }
-
-            Rock_Identifier id = rock.GetComponent<Rock_Identifier>();
-            if (id)
-            {
-                id.isSnapped = false;
-            }
-        }
-
-        correctHole = 0;
+        DropRock();
     }
+
+    // Reset player position and velocity
+    puzzleFailSFX.Play();
+    player.position = currentCheckpoint;
+    Vector3 pos = player.transform.position;
+    pos.z = 0f;
+    player.transform.position = pos;
+
+    Rigidbody2D prb = player.GetComponent<Rigidbody2D>();
+    if (prb) prb.linearVelocity = Vector2.zero;
+}
 
 
     void HandleRockPickup()
@@ -215,12 +191,27 @@ if (mainCamera != null)
 
                         heldRock = hit.gameObject;
 
+
+                        SpriteRenderer sr = heldRock.GetComponent<SpriteRenderer>();
+                        if (sr != null)
+                        {
+                            sr.sortingOrder = 10;
+                        }
+
+
                         float rockHeight = 1f;
                         Collider2D col = heldRock.GetComponent<Collider2D>();
                         if (col != null)
                         {
                             rockHeight = col.bounds.size.y;
                         }
+
+                       
+                        if (playerCollider != null && col != null)
+                        {
+                            Physics2D.IgnoreCollision(playerCollider, col, true);
+                        }
+
 
                         Vector3 pickupPos = player.position + new Vector3(0f, 1f + (rockHeight / 2f), 0f);
                         heldRock.transform.position = pickupPos;
@@ -242,26 +233,39 @@ if (mainCamera != null)
         }
     }
 
-    void DropRock()
+void DropRock()
+{
+    heldRock.transform.SetParent(null);
+
+    float rockHeightOffset = 0.5f;
+    Collider2D col = heldRock.GetComponent<Collider2D>();
+    if (col != null)
     {
-        heldRock.transform.SetParent(null);
-
-        float rockHeightOffset = 0.5f;
-        Collider2D col = heldRock.GetComponent<Collider2D>();
-        if (col != null)
-        {
-            rockHeightOffset = col.bounds.extents.y;
-        }
-
-        Vector3 dropOffset = new Vector3(3f * lastFacingDirection, rockHeightOffset, 0f);
-        heldRock.transform.position = player.position + dropOffset;
-
-        Rigidbody2D rb = heldRock.GetComponent<Rigidbody2D>();
-        if (rb) rb.simulated = true;
-        if (col != null) col.enabled = true;
-
-        heldRock = null;
+        rockHeightOffset = col.bounds.extents.y;
     }
+
+    Vector3 dropOffset = new Vector3(3f * lastFacingDirection, rockHeightOffset, 0f);
+    Vector3 dropPosition = player.position + dropOffset;
+    dropPosition.z = 10f;
+    heldRock.transform.position = dropPosition;
+
+    Rigidbody2D rb = heldRock.GetComponent<Rigidbody2D>();
+    if (rb) rb.simulated = true;
+    if (col != null) col.enabled = true;
+
+    if (playerCollider != null)
+    {
+        Physics2D.IgnoreCollision(playerCollider, col, true);
+    }
+
+    SpriteRenderer sr = heldRock.GetComponent<SpriteRenderer>();
+    if (sr != null)
+    {
+        sr.sortingOrder = 0;
+    }
+
+    heldRock = null;
+}
 
    public void ReturnCameraToPlayer()
 {

@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Pause Screen.unity
     guid: 5a109d162bef8bd4086fae7675543936
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/KeyboardAdj.unity
     guid: dc83962a22c62944396103aa921041ad
   - enabled: 1

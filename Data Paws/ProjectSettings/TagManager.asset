@@ -20,6 +20,8 @@ TagManager:
   - Checkpoint
   - Exit
   - Ground
+  - PlayerIgnore
+  - Coin
   layers:
   - Default
   - TransparentFX
@@ -32,8 +34,8 @@ TagManager:
   - 
   - Item
   - Node
-  - 
-  - 
+  - PlayerIgnore
+  - Coin
   - 
   - 
   - 

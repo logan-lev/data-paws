@@ -22,6 +22,7 @@ TagManager:
   - Ground
   - PlayerIgnore
   - Coin
+  - River
   layers:
   - Default
   - TransparentFX

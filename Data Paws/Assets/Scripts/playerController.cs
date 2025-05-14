@@ -185,11 +185,17 @@ public class PlayerMovement : MonoBehaviour
             Respawn();
         }
 
-        if (collision.CompareTag("Checkpoint"))
-        {
-            deathSFX.Play();
-            puzzleManager.ResetPuzzle();
-        }
+        if (collision.CompareTag("River"))
+{
+    deathSFX.Play();
+    puzzleManager.ResetPlayerOnly(); // only reset player
+}
+
+if (collision.CompareTag("Checkpoint"))
+{
+    puzzleManager.StartPuzzleCheckpoint(collision.transform); // just start puzzle
+}
+
 
         if(collision.CompareTag("PlayerIgnore")){
             Physics2D.IgnoreCollision(collision, playerCollide,true);
@@ -225,4 +231,9 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = Vector2.zero; // Cancel current motion
         transform.position = respawnPoint.position; // Teleport to respawn
     }
+    public void UpdateRespawnPoint(Vector3 newPosition)
+{
+    respawnPoint.position = newPosition;
+}
+
 }

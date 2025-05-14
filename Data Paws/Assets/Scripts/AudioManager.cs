@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityEngine.Device;
 
 public class AudioManager : MonoBehaviour
 {
@@ -18,17 +20,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (musicSlider.value == 0)
-        {
-            audioMixer.SetFloat("MusicVolume", -80f); // Mute
-        }
-    }
 
-    public void SetMusicVolume(float volume)
+    public void SetMusicVolume()
     {
-        audioMixer.SetFloat("MusicVolume", Mathf.Log10(volume) * 20); // Convert 0–1 scale to dB
+        float musicVol = musicSlider.value;
+        audioMixer.SetFloat("MusicVolume", Mathf.Log10(musicVol) * 20); // Convert 0–1 scale to dB
     }
 
 

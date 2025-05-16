@@ -1,17 +1,65 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InGameHintsManager : MonoBehaviour
 {
     public GameObject bgPanel;
-    private bool isPaused = false;
 
+    private static bool isHintVisible = true;
+    private static InGameHintsManager instance;
 
-    // Update is called once per frame
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void Start()
+    {
+        TryLinkBG();
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H) && bgPanel != null)
         {
-            bgPanel.SetActive(!bgPanel.activeSelf);
+            isHintVisible = !isHintVisible;
+            bgPanel.SetActive(isHintVisible);
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        TryLinkBG();
+    }
+
+    private void TryLinkBG()
+    {
+        GameObject foundBG = GameObject.Find("BG");
+        if (foundBG != null)
+        {
+            bgPanel = foundBG;
+            bgPanel.SetActive(isHintVisible);
+        }
+        else
+        {
+            bgPanel = null;
         }
     }
 }

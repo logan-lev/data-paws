@@ -45,6 +45,7 @@ private bool isPaused = false;
 
     [Header("UI")]
     public GameObject pickupPrompt;
+    public GameObject pickupBackground;
 
     void Start()
     {
@@ -191,7 +192,7 @@ public void ResetPlayerOnly()
                     {
                         continue;
                     }
-            
+
                     nearRock = true;
                     break;
                 }
@@ -199,11 +200,19 @@ public void ResetPlayerOnly()
 
             if (pickupPrompt != null)
                 pickupPrompt.SetActive(nearRock);
+
+            if (pickupBackground != null)
+                pickupBackground.SetActive(nearRock);
+    
         }
         else
         {
             if (pickupPrompt != null)
                 pickupPrompt.SetActive(false);
+
+            if (pickupBackground != null)
+                pickupBackground.SetActive(false);
+
         }
 
         if (Input.GetKeyDown(KeyCode.E))

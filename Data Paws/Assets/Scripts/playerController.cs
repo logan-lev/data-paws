@@ -227,13 +227,28 @@ if (collision.CompareTag("Checkpoint"))
     }
 
     void Respawn()
-    {
-        rb.linearVelocity = Vector2.zero; // Cancel current motion
-        transform.position = respawnPoint.position; // Teleport to respawn
-    }
-    public void UpdateRespawnPoint(Vector3 newPosition)
 {
-    respawnPoint.position = newPosition;
+    rb.linearVelocity = Vector2.zero;
+    rb.angularVelocity = 0f;
+
+    if (treeManager != null)
+    {
+        treeManager.RespawnAtCheckpoint(); 
+    }
+    else if (respawnPoint != null)
+    {
+        transform.position = respawnPoint.position; 
+    }
 }
+
+public void UpdateRespawnPoint(Vector3 newPosition)
+{
+    if (respawnPoint != null)
+    {
+        respawnPoint.position = newPosition;
+    }
+}
+
+
 
 }

@@ -7,6 +7,8 @@ public class TreeManager : MonoBehaviour
     private int currentIndex = 0;
 
     public TMP_Text currentNumberText;
+    public GameObject numberTextBackground;
+
     public Door door;
 
     [Header("Camera Switching")]
@@ -25,30 +27,62 @@ public class TreeManager : MonoBehaviour
     public Transform puzzleResetPoint;
     private bool puzzleFinished = false;
 
+    [Header("UI")]
+    public GameObject pickupPrompt;
+    public GameObject pickupBackground;
 
-    private void Start()
+    [Header("Checkpoint System")]
+    public Transform[] checkpointTriggers;
+    private Vector3 currentCheckpointPosition;
+
+
+
+
+    void Start()
     {
         UpdateNumberDisplay();
         allNodes = FindObjectsByType<TreeNode>(FindObjectsSortMode.None);
+
+        // Set initial checkpoint to levelResetPoint
+        if (levelResetPoint != null)
+        {
+            currentCheckpointPosition = levelResetPoint.position;
+        }
     }
+
 
     private void Update()
-{
-    if (puzzleFinished)
-        return; 
-
-    if (Input.GetKeyDown(KeyCode.R))
     {
-        if (puzzleStarted)
+        if (puzzleFinished)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            ResetPuzzle();
+            if (puzzleStarted)
+                ResetPuzzle();
+            else
+                ResetPlayerToLevelStart();
         }
-        else
+
+        bool nearInteractable = false;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(player.position, 1.5f);
+
+        foreach (var hit in hits)
         {
-            ResetPlayerToLevelStart(); 
+            TreeNode node = hit.GetComponent<TreeNode>();
+            if (node != null && !node.isFilled && !node.alwaysFilled)
+            {
+                nearInteractable = true;
+                break;
+            }
         }
-    }
-}
+
+        if (pickupPrompt != null)
+            pickupPrompt.SetActive(nearInteractable);
+
+        if (pickupBackground != null)
+            pickupBackground.SetActive(nearInteractable);
+    } 
 
     public int GetCurrentNumber()
     {
@@ -73,17 +107,26 @@ public class TreeManager : MonoBehaviour
     if (currentNumberText != null)
         currentNumberText.gameObject.SetActive(true);
 
+    if (numberTextBackground != null)
+        numberTextBackground.SetActive(true);
+
     puzzleStarted = true;
 
     if (puzzleWall != null)
         puzzleWall.SetActive(true);
 }
 
+
     public void HideNextNumber()
-    {
-        if (currentNumberText != null)
-            currentNumberText.gameObject.SetActive(false);
-    }
+{
+    if (currentNumberText != null)
+        currentNumberText.gameObject.SetActive(false);
+
+    if (numberTextBackground != null)
+        numberTextBackground.SetActive(false);
+}
+
+
 
     private void UpdateNumberDisplay()
     {
@@ -122,21 +165,6 @@ public class TreeManager : MonoBehaviour
         }
     }
 
-    // Instantly reset camera positions too
-    if (zoomedOutCamera != null && player != null)
-    {
-        Vector3 camPos = zoomedOutCamera.transform.position;
-        camPos.y = player.position.y;
-        zoomedOutCamera.transform.position = camPos;
-    }
-
-    if (normalCamera != null && player != null)
-    {
-        Vector3 camPos = normalCamera.transform.position;
-        camPos.x = player.position.x;
-        camPos.y = player.position.y;
-        normalCamera.transform.position = camPos;
-    }
 
     // Reset all nodes
     foreach (var node in allNodes)
@@ -154,24 +182,37 @@ public class TreeManager : MonoBehaviour
     if (normalCamera != null) normalCamera.enabled = false;
 }
 
-private void ResetPlayerToLevelStart()
+    private void ResetPlayerToLevelStart()
 {
-    if (player != null && levelResetPoint != null)
+    RespawnAtCheckpoint();
+}
+
+    public void UpdateCheckpoint(Vector3 newCheckpoint)
     {
-        player.position = levelResetPoint.position;
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        currentCheckpointPosition = newCheckpoint;
+    }
+    public void RespawnAtCheckpoint()
+    {
+        if (player != null)
         {
-            rb.linearVelocity = Vector2.zero;
+            player.position = new Vector3(currentCheckpointPosition.x, currentCheckpointPosition.y, 0f);
+            Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
         }
     }
+public void HideInteractUI()
+{
+    if (pickupPrompt != null)
+        pickupPrompt.SetActive(false);
 
-    if (normalCamera != null && player != null)
-    {
-        Vector3 camPos = normalCamera.transform.position;
-        camPos.x = player.position.x;
-        camPos.y = player.position.y;
-        normalCamera.transform.position = camPos;
-    }
+    if (pickupBackground != null)
+        pickupBackground.SetActive(false);
 }
+
+
+
 }

@@ -1,44 +1,71 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Device;
 
 public class AudioManager : MonoBehaviour
 {
     private static AudioManager instance;
-    public AudioMixer audioMixer;
+    public static float globalVolume = 1f;
+
     public Slider musicSlider;
+    public AudioSource audioSource; // optional if controlling a local source
 
-    void Start()
-    {
-        if (musicSlider != null)
-        {
-            float value;
-            audioMixer.GetFloat("MusicVolume", out value);
-            musicSlider.value = Mathf.Pow(10, value / 20f); // convert dB to 0–1 scale
-        }
-    }
-
-
-    public void SetMusicVolume()
-    {
-        float musicVol = musicSlider.value;
-        audioMixer.SetFloat("MusicVolume", Mathf.Log10(musicVol) * 20); // Convert 0–1 scale to dB
-    }
-
+    private const string VolumeKey = "GlobalVolume";
 
     void Awake()
     {
-        if (instance == null)
+        if (instance != null && instance != this)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        // Load volume from PlayerPrefs or use default
+        globalVolume = PlayerPrefs.HasKey(VolumeKey) ? PlayerPrefs.GetFloat(VolumeKey) : 1f;
+
+        if (musicSlider != null)
+            musicSlider.value = globalVolume;
+
+        SetMusicVolume();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public void SetMusicVolume()
+    {
+        globalVolume = musicSlider.value;
+
+        // Save volume
+        PlayerPrefs.SetFloat(VolumeKey, globalVolume);
+        PlayerPrefs.Save();
+
+        // Update all current AudioSources
+        foreach (AudioSource src in FindObjectsByType<AudioSource>(FindObjectsSortMode.None))
         {
-            Destroy(gameObject); // Prevent duplicates
+            if (src != null && src.enabled)
+                src.volume = globalVolume;
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "Main Title" && scene.name != "Levels Page")
+        {
+            if (TryGetComponent<AudioSource>(out var src))
+                src.Stop();
+
+            Destroy(gameObject);
         }
     }
 }
-

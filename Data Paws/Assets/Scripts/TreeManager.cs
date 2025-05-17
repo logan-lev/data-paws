@@ -39,16 +39,16 @@ public class TreeManager : MonoBehaviour
 
 
     void Start()
-{
-    UpdateNumberDisplay();
-    allNodes = FindObjectsByType<TreeNode>(FindObjectsSortMode.None);
-
-    // Set initial checkpoint to levelResetPoint
-    if (levelResetPoint != null)
     {
-        currentCheckpointPosition = levelResetPoint.position;
+        UpdateNumberDisplay();
+        allNodes = FindObjectsByType<TreeNode>(FindObjectsSortMode.None);
+
+        // Set initial checkpoint to levelResetPoint
+        if (levelResetPoint != null)
+        {
+            currentCheckpointPosition = levelResetPoint.position;
+        }
     }
-}
 
 
     private void Update()
@@ -65,17 +65,24 @@ public class TreeManager : MonoBehaviour
         }
 
         bool nearInteractable = false;
-Collider2D[] hits = Physics2D.OverlapCircleAll(player.position, 1.5f);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(player.position, 1.5f);
 
-if (pickupPrompt != null)
-    pickupPrompt.SetActive(nearInteractable);
+        foreach (var hit in hits)
+        {
+            TreeNode node = hit.GetComponent<TreeNode>();
+            if (node != null && !node.isFilled && !node.alwaysFilled)
+            {
+                nearInteractable = true;
+                break;
+            }
+        }
 
-if (pickupBackground != null)
-    pickupBackground.SetActive(nearInteractable);
+        if (pickupPrompt != null)
+            pickupPrompt.SetActive(nearInteractable);
 
-{
-}
-}
+        if (pickupBackground != null)
+            pickupBackground.SetActive(nearInteractable);
+    } 
 
     public int GetCurrentNumber()
     {
@@ -184,19 +191,28 @@ if (pickupBackground != null)
     {
         currentCheckpointPosition = newCheckpoint;
     }
-public void RespawnAtCheckpoint()
-{
-    if (player != null)
+    public void RespawnAtCheckpoint()
     {
-        player.position = new Vector3(currentCheckpointPosition.x, currentCheckpointPosition.y, 0f);
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        if (player != null)
         {
-            rb.linearVelocity = Vector2.zero;
-            rb.angularVelocity = 0f;
+            player.position = new Vector3(currentCheckpointPosition.x, currentCheckpointPosition.y, 0f);
+            Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
         }
     }
+public void HideInteractUI()
+{
+    if (pickupPrompt != null)
+        pickupPrompt.SetActive(false);
+
+    if (pickupBackground != null)
+        pickupBackground.SetActive(false);
 }
+
 
 
 }

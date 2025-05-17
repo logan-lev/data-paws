@@ -34,7 +34,7 @@ public class TreeNode : MonoBehaviour
         {
             currentValue = value;
             UpdateNumberDisplay();
-            FlashColor(Color.green);
+            FlashColor(Color.blue);
             callback?.Invoke(true);
         }
         else

@@ -23,6 +23,10 @@ TagManager:
   - PlayerIgnore
   - Coin
   - River
+  - Item
+  - Slider
+  - MusicSlider
+  - CoinText
   layers:
   - Default
   - TransparentFX

@@ -147,6 +147,7 @@ public class TreeManager : MonoBehaviour
         normalCamera.enabled = true;
 
     HideNextNumber();
+    HideInteractUI();
 
     puzzleStarted = false;
     puzzleFinished = true; 

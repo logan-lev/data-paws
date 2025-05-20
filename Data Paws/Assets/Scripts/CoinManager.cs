@@ -47,27 +47,33 @@ public class CoinManager : MonoBehaviour
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-{
-    // Try to find the CoinText in the new scene
-    GameObject found = GameObject.FindWithTag("CoinText");
-    if (found != null)
     {
-        coinText = found.GetComponent<TMP_Text>();
-    }
-    else
-    {
-        coinText = null;
-    }
+        // Try to find the CoinText in the new scene
+        GameObject found = GameObject.FindWithTag("CoinText");
+        if (found != null)
+        {
+            coinText = found.GetComponent<TMP_Text>();
+        }
+        else
+        {
+            coinText = null;
+        }
 
-    // Show or hide based on scene name
-    bool showCoinUI = scene.name == "Tutorial" || scene.name == "Level 1" || scene.name == "Level 2" || scene.name == "End Screen";
+        // Show or hide based on scene name
+        bool showCoinUI = scene.name == "Tutorial" || scene.name == "Level 1" || scene.name == "Level 2" || scene.name == "End Screen";
 
-    if (coinText != null)
-    {
-        coinText.gameObject.SetActive(showCoinUI);
-        if (showCoinUI)
-            coinText.text = coinCount.ToString() + " / 7 Coins Collected";
-    }
+        if (coinText != null)
+        {
+            coinText.gameObject.SetActive(showCoinUI);
+            if (showCoinUI)
+                coinText.text = coinCount.ToString() + " / 7 Coins Collected";
+        }
+
+        if (scene.name == "Main Title")
+        {
+            coinCount = 0;
+            Debug.Log("Coins: " + coinCount);
+        }
 }
 
     public void AddCoin()

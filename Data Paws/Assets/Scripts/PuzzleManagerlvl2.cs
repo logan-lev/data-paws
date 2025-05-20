@@ -5,9 +5,17 @@ public class PuzzleManagerlvl2 : MonoBehaviour
 {
     public ItemSpawner itemSpawner;
     public Door2 door;
+    private Vector3 currentCheckpointPosition;
+
+    public PlayerMovement playerMovement;
+
 
     [Header("UI Elements")]
     public TMP_Text currentItemText;
+
+    [Header("Pickup Prompt")]
+    public GameObject pickupPrompt;
+    public GameObject pickupPromptBackground;
 
     [Header("Cameras")]
     public Camera normalCamera;
@@ -27,6 +35,8 @@ public class PuzzleManagerlvl2 : MonoBehaviour
     private int itemsSorted = 0;
     private int totalItems;
 
+    private float pickupRange = 2.5f;
+
     private void Start()
     {
         if (itemSpawner != null)
@@ -38,11 +48,20 @@ public class PuzzleManagerlvl2 : MonoBehaviour
             currentItemText.gameObject.SetActive(false);
         }
 
+        if (pickupPrompt != null)
+            pickupPrompt.SetActive(false);
+        if (pickupPromptBackground != null)
+            pickupPromptBackground.SetActive(false);
+
         if (zoomedOutCamera != null)
             zoomedOutCamera.enabled = false;
 
         if (normalCamera != null)
             normalCamera.enabled = true;
+
+        if (levelResetPoint != null)
+            currentCheckpointPosition = levelResetPoint.position;
+
     }
 
     public void StartPuzzle()
@@ -96,7 +115,6 @@ public class PuzzleManagerlvl2 : MonoBehaviour
 
             if (normalCamera != null)
                 normalCamera.enabled = true;
-
         }
     }
 
@@ -107,6 +125,12 @@ public class PuzzleManagerlvl2 : MonoBehaviour
     }
 
     private void Update()
+    {
+        HandleReset();
+        HandlePickupPrompt();
+    }
+
+    private void HandleReset()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -120,25 +144,47 @@ public class PuzzleManagerlvl2 : MonoBehaviour
         }
     }
 
-    private void ResetPlayerToLevelStart()
+    private void HandlePickupPrompt()
+{
+    if (playerMovement != null && playerMovement.IsHoldingItem())
     {
-        if (player != null && levelResetPoint != null)
-        {
-            player.position = levelResetPoint.position;
-            Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-            if (rb != null)
-                rb.linearVelocity = Vector2.zero;
-        }
+        if (pickupPrompt != null)
+            pickupPrompt.SetActive(false);
+        if (pickupPromptBackground != null)
+            pickupPromptBackground.SetActive(false);
+        return;
+    }
 
-        if (normalCamera != null)
+    GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+    bool showPrompt = false;
+
+    foreach (GameObject item in items)
+    {
+        float distance = Vector2.Distance(player.position, item.transform.position);
+        if (distance <= pickupRange)
         {
-            normalCamera.transform.position = new Vector3(
-                player.position.x,
-                player.position.y,
-                normalCamera.transform.position.z
-            );
+            showPrompt = true;
+            break;
         }
     }
+
+    if (pickupPrompt != null)
+        pickupPrompt.SetActive(showPrompt);
+    if (pickupPromptBackground != null)
+        pickupPromptBackground.SetActive(showPrompt);
+}
+
+
+    public void ResetPlayerToLevelStart()
+{
+    if (player != null)
+    {
+        player.position = currentCheckpointPosition;
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+    }
+}
 
     private void ResetPuzzle()
     {
@@ -164,4 +210,9 @@ public class PuzzleManagerlvl2 : MonoBehaviour
         if (invisibleWall != null)
             invisibleWall.SetActive(true);
     }
+    public void UpdateCheckpoint(Vector3 newPosition)
+{
+    currentCheckpointPosition = newPosition;
+}
+
 }

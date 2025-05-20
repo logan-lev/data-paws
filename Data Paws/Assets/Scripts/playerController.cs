@@ -233,11 +233,16 @@ if (collision.CompareTag("Checkpoint"))
 
     if (treeManager != null)
     {
-        treeManager.RespawnAtCheckpoint(); 
+        treeManager.RespawnAtCheckpoint();
+    }
+    else if (puzzleManagerLvl2 != null)
+    {
+        
+        puzzleManagerLvl2.ResetPlayerToLevelStart(); 
     }
     else if (respawnPoint != null)
     {
-        transform.position = respawnPoint.position; 
+        transform.position = respawnPoint.position;
     }
 }
 
@@ -247,6 +252,10 @@ public void UpdateRespawnPoint(Vector3 newPosition)
     {
         respawnPoint.position = newPosition;
     }
+}
+public bool IsHoldingItem()
+{
+    return heldItem != null;
 }
 
 

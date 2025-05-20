@@ -6,9 +6,10 @@ public class AudioManager : MonoBehaviour
 {
     private static AudioManager instance;
     public static float globalVolume = 1f;
+    private static bool volumeInitialized = false;
 
     public Slider musicSlider;
-    public AudioSource audioSource; // optional if controlling a local source
+    public AudioSource audioSource;
 
     private const string VolumeKey = "GlobalVolume";
 
@@ -22,20 +23,43 @@ public class AudioManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        
+        if (!volumeInitialized)
+        {
+            if (PlayerPrefs.HasKey(VolumeKey))
+                globalVolume = PlayerPrefs.GetFloat(VolumeKey);
+            else
+                globalVolume = 1f; // default to max volume on launch
+
+            volumeInitialized = true;
+        }
     }
 
     void Start()
     {
-        // Load volume from PlayerPrefs or use default
-        globalVolume = PlayerPrefs.HasKey(VolumeKey) ? PlayerPrefs.GetFloat(VolumeKey) : 1f;
-
-        if (musicSlider != null)
-            musicSlider.value = globalVolume;
-
+        SetupSlider();
         SetMusicVolume();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+    private void SetupSlider()
+{
+    // Find slider in scene if not assigned
+    if (musicSlider == null)
+    {
+        musicSlider = GameObject.FindWithTag("MusicSlider")?.GetComponent<Slider>();
+    }
+
+    if (musicSlider != null)
+    {
+        musicSlider.onValueChanged.RemoveAllListeners();
+        musicSlider.value = globalVolume;
+        musicSlider.onValueChanged.AddListener(delegate { SetMusicVolume(); });
+    }
+}
+
 
     void OnDestroy()
     {
@@ -44,13 +68,12 @@ public class AudioManager : MonoBehaviour
 
     public void SetMusicVolume()
     {
-        globalVolume = musicSlider.value;
+        if (musicSlider != null)
+            globalVolume = musicSlider.value;
 
-        // Save volume
         PlayerPrefs.SetFloat(VolumeKey, globalVolume);
         PlayerPrefs.Save();
 
-        // Update all current AudioSources
         foreach (AudioSource src in FindObjectsByType<AudioSource>(FindObjectsSortMode.None))
         {
             if (src != null && src.enabled)
@@ -59,13 +82,15 @@ public class AudioManager : MonoBehaviour
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name != "Main Title" && scene.name != "Levels Page")
-        {
-            if (TryGetComponent<AudioSource>(out var src))
-                src.Stop();
+{
+    SetupSlider();
 
-            Destroy(gameObject);
-        }
+    if (scene.name != "Main Title" && scene.name != "Levels Page")
+    {
+        if (TryGetComponent<AudioSource>(out var src))
+            src.Stop();
+
+        Destroy(gameObject);
     }
+}
 }

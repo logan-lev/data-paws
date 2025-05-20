@@ -55,7 +55,7 @@ public class InGameHintsManager : MonoBehaviour
         if (foundBG != null)
         {
             bgPanel = foundBG;
-            bgPanel.SetActive(isHintVisible);
+            bgPanel.SetActive(true);
         }
         else
         {

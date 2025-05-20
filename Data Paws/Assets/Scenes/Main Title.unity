@@ -131,8 +131,7 @@ GameObject:
   - component: {fileID: 88310370}
   - component: {fileID: 88310369}
   - component: {fileID: 88310373}
-  - component: {fileID: 88310375}
-  - component: {fileID: 88310376}
+  - component: {fileID: 88310374}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -258,19 +257,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!114 &88310375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 88310368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3708fc8c5443a394b8bc6f16fe195b56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &88310376
+--- !u!114 &88310374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -548,11 +535,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629873053831499742, guid: 7491d6e64073e9b458241bc9ca848be6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 8.7914
+      value: 8.791382
       objectReference: {fileID: 0}
     - target: {fileID: 6629873053831499742, guid: 7491d6e64073e9b458241bc9ca848be6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7.0332
+      value: -7.033203
       objectReference: {fileID: 0}
     - target: {fileID: 7498210350728329762, guid: 7491d6e64073e9b458241bc9ca848be6, type: 3}
       propertyPath: m_Pivot.x
@@ -828,7 +815,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 88310376}
+      - m_Target: {fileID: 88310374}
         m_TargetAssemblyTypeName: ToLevels, Assembly-CSharp
         m_MethodName: LoadLevelsScene
         m_Mode: 1
@@ -1652,9 +1639,9 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1728383737}
   - {fileID: 88310371}
   - {fileID: 1230547000}
-  - {fileID: 1728383737}
   - {fileID: 696044606}
   - {fileID: 1986923674}
   - {fileID: 329085742}

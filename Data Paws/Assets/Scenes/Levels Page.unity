@@ -281,7 +281,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1280316098}
+      - m_Target: {fileID: 1280316102}
         m_TargetAssemblyTypeName: TitleSceneController, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
@@ -1003,9 +1003,9 @@ GameObject:
   - component: {fileID: 1280316093}
   - component: {fileID: 1280316097}
   - component: {fileID: 1280316096}
-  - component: {fileID: 1280316098}
   - component: {fileID: 1280316101}
   - component: {fileID: 1280316100}
+  - component: {fileID: 1280316102}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1143,18 +1143,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!114 &1280316098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1280316092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abc40b75aa86a8347b9e9d3801bf7e38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1280316100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1177,6 +1165,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1fc6aff3e6a657a44be08dd523029c84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1280316102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280316092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abc40b75aa86a8347b9e9d3801bf7e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1287246977

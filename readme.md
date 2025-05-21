@@ -1,25 +1,21 @@
-# Game Name
+<img src="https://github.com/user-attachments/assets/4030fbf8-fcc0-4461-ae07-81f85d3f93d4" alt="Screenshot" width="400"/>
 
-Data Paws
-
-## Description of Game
-
-We’re combining elements of traditional platformers with puzzles inspired by Python Data Structures to make Data Paws, a game where you explore the city through the lens of a cat. The game teaches the player all about different data structures in a fun and entertaining format, suitable for even the most inexperienced people.
-
-## Developers
+## DEVELOPERS
 
 Logan Levine (loganlev@udel.edu)\
 Tolulope Akin-Olugbemi (thettolu@udel.edu)\
 Zhicheng Liu (zhcnliu@udel.edu)\
 Alexander Clawson (clawsonx@udel.edu)
 
-## Basic Instructions
-(Coming Soon)
+## PITCH
 
-## Screenshot
-(Coming Soon)
+Our game is a 2D platformer with a vibrant pixelart style, designed to be fun, accessible, and educational for everyone. As players progress through engaging levels, they encounter interactive puzzles that teach them about different data structures like stacks, binary trees, and hash tables. Each level blends classic platforming with computer science concepts in a way that feels natural and rewarding. The goal is to make learning foundational programming ideas exciting and memorable though the gameplay. Whether you're just starting out or brushing up on the basics, this game offers a creative and enjoyable way to explore data structures in action.
 
-## Gameplay Video
+## BASIC INSTRUCTIONS
+
+Use A/D or Left/Right Arrow Keys to move, and press W, Up Arrow, or Spacebar to jump. Start by selecting one of the three available levels. Each level is a classic 2D platformer experience where you’ll run, jump, avoid enemies and obstacles. You can collect coins along the way! At the end of each level, you'll face a puzzle based on a specific data structure. Solve the puzzle to complete the level and progress!
+
+## SCREENSHOTS
 (Coming Soon)
 
 ## Education Game Design Document

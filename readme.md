@@ -13,7 +13,9 @@ Our game is a 2D platformer with a vibrant pixelart style, designed to be fun, a
 
 ## BASIC INSTRUCTIONS
 
-Use A/D or Left/Right Arrow Keys to move, and press W, Up Arrow, or Spacebar to jump. Start by selecting one of the three available levels. Each level is a classic 2D platformer experience where you’ll run, jump, avoid enemies and obstacles. You can collect coins along the way! At the end of each level, you'll face a puzzle based on a specific data structure. Solve the puzzle to complete the level and progress!
+Use A/D or Left/Right Arrow Keys to move, and press W, Up Arrow, or Spacebar to jump. Start by selecting one of the three available levels.  
+Each level is a classic 2D platformer experience where you’ll run, jump, avoid enemies and obstacles. You can collect coins along the way!  
+At the end of each level, you'll face a puzzle based on a specific data structure. Solve the puzzle to complete the level and progress!
 
 ## SCREENSHOTS
 

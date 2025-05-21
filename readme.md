@@ -18,13 +18,13 @@ Use A/D or Left/Right Arrow Keys to move, and press W, Up Arrow, or Spacebar to 
 ## SCREENSHOTS
 
 ### Tutorial Level - Platforming Start  
-<img src="docs/level1.png" width="320"/>
+<img src="docs/tutlvlstart.png" width="320"/>
 
 ### Level 1 - Puzzle 
-<img src="docs/level2.png" width="320"/>
+<img src="docs/level1puzzle.png" width="320"/>
 
 ### Level 2 - Platforming Start  
-<img src="docs/puzzle.png" width="320"/>
+<img src="docs/level2start.png" width="320"/>
 
 ## Education Game Design Document
 [EGDD](docs/egdd.md)

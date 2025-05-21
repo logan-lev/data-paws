@@ -21,7 +21,7 @@ Data Paws
 ## Core Gameplay Mechanics (Brief)
 
 - *Screen-To-Screen Gameplay*
-- *Environmental Interactions with NPCs and Items*
+- *Environmental Interactions with Items*
 - *Platforming Actions*
 - *Solving Puzzles*
 
@@ -41,7 +41,7 @@ Data Paws
 
 ## Learning Objective
 
-- *Understand Basic Data Structures*: *By the end of the instructions, younger students should be able to identify and explain the fundamental concepts of key data structures—such as Stacks, Queues, Linked Lists, and Hash Tables—through an engaging, puzzle-based learning experience.*
+- *Understand Basic Data Structures*: *By the end of the instructions, younger students should be able to identify and explain the fundamental concepts of key data structures—such as Stacks, Binary Trees, and Hash Tables—through an engaging, puzzle-based learning experience.*
 
 ## Prerequisite Knowledge
 
@@ -61,7 +61,7 @@ Data Paws
 
 ## Player Interaction Pattern
 
-* This game is played as a platformer in singleplayer where the player explores the cityscape and interacts with NPCs while solving puzzles that fit well into the narrative.*
+* This game is played as a platformer in singleplayer where the player explores the cityscape and solves puzzles that fit well into the narrative.*
 
 ## Player Modes
 
@@ -72,23 +72,23 @@ Data Paws
 # Gameplay Objectives
 
 - *Primary Objective #1*:
-    - Description: *Reaching the end of the game (Gets the fish)*
+    - Description: *Reaching the end of the game*
     - Alignment: *This relates to our learning objective because the player has to complete all the puzzles in the game*
 - *Primary Objective #2*:
-    - Description: *Get the highest score possible (S)*
+    - Description: *Solve all of the puzzles*
     - Alignment: *Shows mastery of learning data structures and the players understanding of the mechanics*
 
 # Procedures/Actions
 
-*The player can move left/right, jump, drop, crawl, sprint, and interact.*
+*The player can move left/right, jump, and interact.*
 
 # Rules
 
-*The player is able to use hints given in game as well as any external resources they want to. If they cheat, it's their loss for not learning properly. There will be a lot of things in the game to guide the player, so there shouldn't be any reason to tin the first place. However, there are only a certain amount of hints the player gets, but not enough to get overwhelmed.*
+*The player is able to use hints through external resources if they want to. If they cheat, it's their loss for not learning properly. There will be a lot of things in the game to guide the player, so there shouldn't be any reason to in the first place.*
 
 # Objects/Entities
 
-*Player (i.e. Cat or Dog) / Platforms that you would see in a cityscape / Obstacles such as trash bins, ladders, and water pipes / NPCs and Enemies / Collectables / The Puzzles Themselves.*
+*Player (i.e. Cat) / Platforms that you would see in a cityscape / Obstacles such as trash bins, ladders, and water pipes / Enemies / Collectables / The Puzzles Themselves.*
 
 
 
@@ -97,20 +97,20 @@ Data Paws
 ## Core Gameplay Mechanics (Detailed)
 
 - *Screen-To-Screen Gameplay - Puzzles are split up into individual screens, you can’t progress to the next screen until you finish the current puzzle but you can always go backwards. This is to keep the player’s focus on the current puzzle, they should be able to solve each puzzle given the resources on the current screen.*
-- *Environment: The environment in Data Paws is going to be a cityscape with NPCs (other pets and animals), which the player is able to talk to and complete tasks for and then you can get a hint for a tricky puzzle. The background music will be lofi beats and the sounds will be satisfying.*
-- *Platforming/Animation of the cat - Animated movement of the cat when sprinting, crawling, climbing, jumping, and playing with environment objects.*
-- *Puzzles: The game needs to incorporate different puzzles throughout the different levels. The levels should be incorporated into the level and shouldn't feel forcibly placed. In other words, the puzzle should progress the story while still being educational to the user. The puzzles will relate to a corresponding data structure. For example, at one level the player may need to complete a puzzle that represents a list/linked list. The puzzle should be disguised into the level (chocolate covered broccoli, in a way).*
+- *Environment: The environment in Data Paws is going to be a cityscape. The background music will be lofi beats and the sounds will be satisfying.*
+- *Platforming/Animation of the cat - Animated movement of the cat when jumping, and playing with environment objects.*
+- *Puzzles: The game needs to incorporate different puzzles throughout the different levels. The puzzles should be incorporated into the level and shouldn't feel forcibly placed. In other words, the puzzle should progress the story while still being educational to the user. The puzzles will relate to a corresponding data structure. For example, at one level the player may need to complete a puzzle that represents a stack. The puzzle should be disguised into the level (chocolate covered broccoli, in a way).*
 
     
 ## Feedback
 
-*There will be sounds and animations for the cat for when you get something wrong or right. We want to have a Scribblenauts type of scene where the camera pans to the “exit” or “solution”, and then back to the cat so it clearly shows that the level is completed. For long-term progression, a constant letter score will be on screen calculated using the amount of time taken and how the puzzles were completed.*
+*There will be sounds and animations for the cat for when you get something wrong or right. We want to have a Scribblenauts type of scene where the camera pans to the “exit” or “solution”, and then back to the cat so it clearly shows that the level is completed.*
 
 # Story and Gameplay
 
 ## Presentation of Rules
 
-*The movement mechanics will be shown during the tutorial level through graffiti on the wall. Other mechanics such as avoiding enemies will be through trial and error learning. The beginning puzzle at the end of the tutorial level will be easier than the others because we will give more hints. Popups will appear next to interactables.*
+*The movement mechanics will be shown during the tutorial level. Other mechanics such as avoiding enemies will be through trial and error learning. The beginning puzzle at the end of the tutorial level will be easier than the others because we will give more hints. Popups will appear next to interactables.*
 
 ## Presentation of Content
 
@@ -152,8 +152,6 @@ Cat eating fish (tentative ending)
 
 - Characters List
   - *Player (Cat)*
-  - *Owner*
-  - *NPCs*
   - *Enemies*
 - Textures:
   - *City Backdrop*

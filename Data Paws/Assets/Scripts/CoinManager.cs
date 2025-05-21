@@ -83,13 +83,6 @@ public class CoinManager : MonoBehaviour
             if (showCoinUI)
                 coinText.text = coinCount.ToString() + " / 7 Coins Collected";
         }
-
-        // Reset coin count when returning to the main title
-        if (scene.name == "Main Title")
-        {
-            coinCount = 0;
-            Debug.Log("Coins: " + coinCount);
-        }
     }
 
     // Increases the coin count by 1 and updates the UI

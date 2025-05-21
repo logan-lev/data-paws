@@ -34,7 +34,8 @@ Use A/D or Left/Right Arrow Keys to move, and press W, Up Arrow, or Spacebar to 
 
 ## CREDITS
 
-This project was developed with the help of [ChatGPT](https://openai.com/chatgpt) by OpenAI, which was used to assist with coding, debugging, and designing.  
+This project was developed with the help of [ChatGPT](https://openai.com/chatgpt) by OpenAI, which was used to assist with coding, debugging, and designing.
+
 The **Minecraft Ten Font** used in this project is created by [NubeFonts](https://www.fontspace.com/profile/NubeFonts). You can find the font [here on FontSpace](https://www.fontspace.com/minecraft-ten-font-f40317).  
 
 All music used in this project is owned by **Nintendo** and originates from the **Pokémon** franchise.  

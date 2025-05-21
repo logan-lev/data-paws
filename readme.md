@@ -28,6 +28,8 @@ Use A/D or Left/Right Arrow Keys to move, and press W, Up Arrow, or Spacebar to 
 
 ## GAMEPLAY TRAILER
 
+[View Gameplay Trailer](https://drive.google.com/file/d/1rwujsTea7XLd_rllEBaCudC0vJ4KMO8y/view?usp=drive_link)
+
 ## EGDD
 
 [View EGDD](docs/egdd.md)
